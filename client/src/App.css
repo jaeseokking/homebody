@@ -1,0 +1,20 @@
+:root {
+    --BGGrey: rgb(227, 228, 230);
+    --BGLightGreay: rgb(240, 240, 240);
+    --FootBG : rgb(210, 210, 210);
+    --SpanishWhite: #E8DEC5;
+    --ivory: #FCFBE8;
+    --white: #ffffff;
+    --Blue: #0066ff;
+    --FontGrey : rgb(197, 197, 197);
+    --FontLightGrey : rgb(235, 235, 235);
+    --FontDarkGrey : rgb(36, 36, 36);
+}
+
+.navbar-toggler:focus {
+    outline: none;
+}
+
+.navbar-toggler {
+    border: none;
+}
