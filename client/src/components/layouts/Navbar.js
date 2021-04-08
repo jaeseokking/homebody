@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, withRouter} from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux'
-import { userLogout } from '../../actions/user_action'
+import { userLogout } from '../../_actions/user_action'
 
 
 
@@ -40,7 +40,7 @@ function Navbar(props) {
       <nav className="navbar navbar-expand-lg navbar-light">
           <div className="logo my-2">
           <Link className="navbar-brand ml-5" to="/">
-            HOME BODY
+            <img src="/logo.png" width="120px" alt="Logo"></img>
           </Link>
           </div>
       
@@ -66,7 +66,7 @@ function Navbar(props) {
           <ul className="navbar-nav">
             <li>
             <Link className="nav-link ml-5 my-2" to='/userInfo'>
-              <img style={{width:'35px'}} src={`data:image/png;base64,${base64String}`} alt="profile">
+              <img className="profile-img img-fluid rounded-circle" src={`data:image/png;base64,${base64String}`} alt="profile">
               </img>{nickname}</Link>
             </li>
             <li>        
@@ -84,7 +84,7 @@ function Navbar(props) {
       <nav className="navbar navbar-expand-lg navbar-light my-2">
           <div className="logo my-2">
             <Link className="navbar-brand ml-5" to="/">
-              HOME BODY
+              <img src="/logo.png" width="120px" alt="Logo"></img>
             </Link>
           </div>
         
@@ -131,9 +131,14 @@ const NavContainer = styled.footer`
     .navbar {
       position: relative;
         background-color: var(--white);
-        color: var(--ivory);
-
+        color: var(--FontGrey);
     }
+
+    .profile-img {
+      width : 35px;
+      height: 35px;
+    }
+
     .nav-link.text-uppercase.ml-5 {
       color: var(--FontDarkGrey);
     }

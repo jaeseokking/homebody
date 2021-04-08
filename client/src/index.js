@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import {applyMiddleware, compose, createStore} from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
-import rootReducer from './reducers'
+import rootReducer from './_reducers'
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { CookiesProvider } from "react-cookie";

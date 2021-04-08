@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { userAuth } from '../actions/user_action';
+import { userAuth } from '../_actions/user_action';
 import { useCookies } from 'react-cookie';
 
 //첫번째 인자 : Component, 두번째 인자 : Component의 option                                                   //기본값이 null 이라는 표시

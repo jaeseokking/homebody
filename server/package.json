@@ -9,13 +9,17 @@
   "author": "Han",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^4.1.0",
     "cookie-parser": "^1.4.5",
+    "countries-api": "^2.0.1",
     "express": "^4.17.1",
     "gm": "^1.23.1",
     "graphicsmagick": "0.0.1",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-sass": "^4.14.1",
+    "prop-types": "^15.6.1",
+    "react-flags": "^0.1.13"
   }
 }

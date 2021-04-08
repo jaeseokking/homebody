@@ -5,9 +5,6 @@ function Footer() {
     return (
         //부트스트랩 클래스정의
         <FooterContainer className="main-footer">
-            <div className="on-footer">
-
-            </div>
             <div className="footer-middle">
                 <div className="container">
                     {/* 행으로 정렬 */}
@@ -19,7 +16,7 @@ function Footer() {
                             <ul className="list-unstyled">
                                 <li>JaeSeok</li>
                                 <li>Main st ssuggogae 34 </li>
-                                <li>phon: 010-5124-2934</li>
+                                <li>phone: 010-5124-2934</li>
                             </ul>
                         </div>
                         {/* Colum2*/}
@@ -57,7 +54,7 @@ function Footer() {
                     <div className="footer-bottom">
                         {/* 중앙배치 */}
                         <p className="text-xs-center">
-                            &copy;{new Date().getFullYear()} City Guide App - All Right Reserved
+                            &copy;{new Date().getFullYear()} Community App - All Right Reserved
                         </p>
                     </div>
                 </div>

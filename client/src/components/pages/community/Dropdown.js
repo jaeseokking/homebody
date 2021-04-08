@@ -1,0 +1,54 @@
+import React from 'react';
+import { useSelector, useDispatch} from 'react-redux';
+import {Link, withRouter} from 'react-router-dom';
+import {communityDelete} from '../../../_actions/board_action';
+
+
+function Dropdown ({postNickName, history}) {
+    const dispatch = useDispatch();
+
+    const user = useSelector(state => state.user);
+    const board = useSelector(state => state.board);
+
+    const body = {
+        board_id : board.detail.list[0].board_id
+    }
+
+    const onDeleteHandler = () => {
+        dispatch(communityDelete(body)).then(response => {
+            if(response.payload.Success){
+                alert('삭제성공');
+                history.push('/community'); 
+            }else{
+                alert('삭제실패');
+            }
+        })
+    }
+    //로그인한 유저와 게시글을 올린 유저가 같을경우 드롭다운을 생성
+    if(user.login.nickname === postNickName){
+        return (
+            <div>
+                <div className="dropdown float-right">
+                    <button className="btn" type="button" 
+                    data-toggle="dropdown">
+                    <em className="fa fa-ellipsis-h"></em>
+                    </button>
+                    <div className="dropdown-menu dropdown-scale dropdown-menu-right"
+                        role="menu">
+                       <Link to="/community/update"><div className="dropdown-item" >update</div></Link>
+                       <button onClick={onDeleteHandler}><a className="dropdown-item" >delete</a></button> 
+                        </div>
+                </div>
+            </div>
+        )
+    }else{
+        return(
+            <div>
+                {/* 일치하지 않을 경우 아무것도 렌더링하지 않음 */}
+            </div>
+        )
+    }
+   
+}
+
+export default withRouter(Dropdown);
