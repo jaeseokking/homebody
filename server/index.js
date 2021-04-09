@@ -123,6 +123,7 @@ function currentDay(){
 			
 			
 }
+
 app.post('/api/register/idcheck', (req, res) => {
     const id = req.body.id;
      
@@ -140,6 +141,33 @@ app.post('/api/register/idcheck', (req, res) => {
         }else{
             res.json({
                 idCheck : false
+            })
+        }
+        
+    })
+    close();
+})
+
+
+//닉네임 중복체크
+app.post('/api/register/nicknamecheck', (req, res) => {
+    const nickname = req.body.nickname;
+     
+    connect();
+    const NicknameDuplicateCheck = 'select * from user where nickname = ?';
+    db.query(NicknameDuplicateCheck, [nickname], (err, result) => {
+        if(err){
+            throw err
+        }
+        console.log(result[0]);
+        //중복되지 않은 경우 
+        if(result[0] === undefined){
+            res.json({
+                nicknameCheck : true
+            })
+        }else{
+            res.json({
+                nicknameCheck : false
             })
         }
         
@@ -416,7 +444,7 @@ app.post('/api/home/getcomment', (req, res) => {
         list = results
         
         for(i= 0 ; i < list.length ; i = i + 1){
-            var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
+            var bitMap = fs.readFileSync(`./public/images/users/${list[i].user_profile}`)
             var profilebuffer = new Buffer.from(bitMap, "base64");
             list[i].profile = profilebuffer    
         }
@@ -431,14 +459,14 @@ app.post('/api/home/getcomment', (req, res) => {
 
 app.post('/api/home/uploadcomment', (req, res) => {
     const home_id = Number(req.body.home_id)
-    const nickname = req.body.nickname
+    const user_nickname = req.body.nickname
     const title = req.body.title
     const content = req.body.content
 
 
     connect();
     const findProfile = 'select profile from user where nickname = ?'
-    const result = db.query(findProfile, [nickname], (err, result, field) => {
+    db.query(findProfile, [user_nickname], (err, result, field) => {
         if(err){
             throw err
         }
@@ -447,8 +475,8 @@ app.post('/api/home/uploadcomment', (req, res) => {
         const regdate = year+'-'+month+'-'+day;
 
         const profile = result[0].profile
-        const insertReview = 'insert into home_comment (home_id, nickname, profile, title, content, regdate) values(?,?,?,?,?,?)'
-        db.query(insertReview, [home_id, nickname, profile, title, content, regdate], (err, result, field) => {
+        const insertReview = 'insert into home_comment (home_id, user_nickname, user_profile, title, content, regdate) values(?,?,?,?,?,?)'
+        db.query(insertReview, [home_id, user_nickname, profile, title, content, regdate], (err, result, field) => {
             if(err){
                 throw err
             }

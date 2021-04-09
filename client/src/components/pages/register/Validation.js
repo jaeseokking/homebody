@@ -16,3 +16,8 @@ export function NameValid(Value) {
     var regExp =  /^[a-zA-Z가-힣]{2,10}$/
     return regExp.test(Value);
 }
+
+export function NickNameValid(Value) {
+    var regExp =  /^[a-zA-Z가-힣0-9]{2,10}$/
+    return regExp.test(Value);
+}

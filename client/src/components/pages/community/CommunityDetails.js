@@ -170,13 +170,42 @@ function CommunityDetails () {
 export default CommunityDetails;
 
 const CDDesing = styled.header`
+  Link {
+    text-decoration: none;
+  }
+
+  .dropdown-item {
+    cursor : pointer;
+    text-decoration: none;
+  }
+
+  .dropdown-item :active{
+    text-decoration: none;
+  }
+
+  .dropdown-item :hover{
+    text-decoration: none;
+  }
+
+  .btn {
+    outline: none;
+    border : none;
+  }
+
+  .btn:focus {
+    outline: none;
+    border : none;
+    box-shadow: none;
+  }
+
   .cardform {
     max-width : 1600px;
   }
 
-  .fa-heart{
-    
+  .fa-ellipsis-h {
+    color : var(--FontGrey);
   }
+
 
   .fa-heart:hover {
     color : rgb(255,100,0);
@@ -321,8 +350,6 @@ const CDDesing = styled.header`
   }
 
   .search input[type="text"] {
-   background-color: #fff;
-   line-height: 10px;
    padding: 15px 0px 20px 20px;
    border: none;
    border-radius: 4px;
@@ -332,6 +359,14 @@ const CDDesing = styled.header`
    display: inline-block;
    width : 100%;
   }
+
+  .search input[type="text"]: focus {
+    outline: none;
+    border:radius : 4px;
+    border:1px solid;
+    box-shadow: none;
+  }
+
 
 
 

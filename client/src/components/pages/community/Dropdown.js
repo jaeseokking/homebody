@@ -15,14 +15,19 @@ function Dropdown ({postNickName, history}) {
     }
 
     const onDeleteHandler = () => {
-        dispatch(communityDelete(body)).then(response => {
-            if(response.payload.Success){
-                alert('삭제성공');
-                history.push('/community'); 
-            }else{
-                alert('삭제실패');
-            }
-        })
+        const result = window.confirm('삭제하시겠습니까?');
+        if(result){
+            dispatch(communityDelete(body)).then(response => {
+                if(response.payload.Success){
+                    alert('삭제성공');
+                    history.push('/community'); 
+                }else{
+                    alert('삭제실패');
+                }
+            })
+        }else{
+            return;
+        }
     }
     //로그인한 유저와 게시글을 올린 유저가 같을경우 드롭다운을 생성
     if(user.login.nickname === postNickName){
@@ -36,7 +41,7 @@ function Dropdown ({postNickName, history}) {
                     <div className="dropdown-menu dropdown-scale dropdown-menu-right"
                         role="menu">
                        <Link to="/community/update"><div className="dropdown-item" >update</div></Link>
-                       <button onClick={onDeleteHandler}><a className="dropdown-item" >delete</a></button> 
+                       <div onClick={onDeleteHandler} className="dropdown-item" >delete</div> 
                         </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { userRegister } from '../../../_actions/user_action';
 import { withRouter } from 'react-router-dom';
@@ -6,19 +6,25 @@ import Axios from 'axios';
 import Resizer from 'react-image-file-resizer';
 import {Container, Col, Form, FormGroup, Label, Input, Button, FormText, FormFeedback } from 'reactstrap';
 import styled from 'styled-components';
-import { IDValid, PWValid, NameValid } from './Validation';
+import { IDValid, PWValid, NameValid, NickNameValid } from './Validation';
 import axios from 'axios';
 
 export function RegisterPage(props){
     //dispatch는 Reducer에 action을 알리기 위한 함수
     const dispatch = useDispatch()
+    const refID = useRef();
+    const refPW = useRef();
+    const refPWCK = useRef();
+    const refName = useRef();
+    const refNick = useRef();
+    
     const [id, setID] = useState();
     const [password, setPassword] = useState();
     const [passwordCheck, setPasswordCheck] = useState();
     const [name, setName] = useState();
     const [nickname, setNickName] = useState();
     const [profile, setProfile] = useState(null);
-    const [preview, setPreview] = useState();
+    const [preview, setPreview] = useState("/default.png");
 
     
 
@@ -61,7 +67,7 @@ export function RegisterPage(props){
         //id를 적은 경우
         if(id !== ''){
             if(IDValid(id)){
-                setIDValid('');
+                setIDValid(false);
                 //중복검사 하기전 메시지 없음
                 setIDMessage('ㅤ')
             }else if (!IDValid(id)){
@@ -78,9 +84,8 @@ export function RegisterPage(props){
     //포커스아웃 되면 자동적으로 실행될 함수 
     const onIDDuplicateCheck = (event) => {
         event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
-        
-        //유효성 검사를 통과한 경우
-        if(idValid !== false && id !== undefined){
+       //유효성 검사를 통과한 경우
+        if(id !== undefined && id !== ''){
             const body = {
                 id : id 
             }
@@ -104,7 +109,6 @@ export function RegisterPage(props){
     //비밀번호 유효성 검사
     useEffect(() => {
         //password를 적은 경우
-        console.log(password);
         if(password !== ''){
             if(PWValid(password)){
                 setPasswordValid(true)
@@ -113,7 +117,7 @@ export function RegisterPage(props){
                     setPasswordCheckValid(true)
                     setPasswordMessage('비밀번호 확인완료')
                 }else if(password !== passwordCheck && passwordCheck !== ''){
-                    setPasswordValid(false)
+                    setPasswordCheckValid(false)
                     setPasswordMessage('비밀번호가 일치하지 않습니다.')
                 }
 
@@ -138,7 +142,7 @@ export function RegisterPage(props){
                 setNameMessage('사용가능한 이름')
             }else if (!NameValid(name)){
                 setNameValid(false)
-                setNameMessage('한글과 영문 대 소문자를 사용가능.(특수기호, 공백 사용불가)')
+                setNameMessage('한글, 영문 사용가능.(특수기호, 공백 사용불가)')
             }
         //아이디를 입력하지 않은 경우 
         }else if(name !== undefined){
@@ -147,6 +151,51 @@ export function RegisterPage(props){
         }
         
     },[name])
+
+
+     //닉네임 유효성 검사
+     useEffect(() => {
+        //nickname을 적은 경우
+        if(nickname !== ''){
+            if(NickNameValid(nickname)){
+                setNicknameValid('');
+                //중복검사 하기전 메시지 없음
+                setNicknameMessage('ㅤ')
+            }else if (!NickNameValid(nickname)){
+                setNicknameValid(false)
+                setNicknameMessage('사용불가')
+            }
+        //아이디를 입력하지 않은 경우 
+        }else{
+            setNicknameValid(false)
+            setNicknameMessage('닉네임은 필수입력입니다.')
+        }
+    },[nickname])
+    
+    //닉네임은 마지막 입력란 이므로 포커스아웃 하지않고 유효성버튼 클릭시 중복확인
+    const onNicknameDuplicateCheck = (event) => {
+        event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
+        
+        //유효성 검사를 통과한 경우하고 값이 있을 경우
+        if(nicknameValid !== false && nickname !== undefined){
+            const body = {
+                nickname : nickname 
+            }
+            Axios.post('/api/register/nicknamecheck', body ).then(response=> {
+                //유효성검사와 중복검사 모두 통과할 경우 
+                if(response.data.nicknameCheck === true){
+                    setNicknameValid(true);
+                    setNicknameMessage('사용가능한 닉네임');
+                }else{
+                    setNicknameMessage('닉네임이 중복됩니다.');
+                }
+            
+               
+            })
+        }
+        
+        
+    }
 
     const resizeFile = (file) => new Promise(resolve => {
         //maxWidh 700 maxHeight 700 file jpeg quaulity 70%, format file
@@ -158,10 +207,10 @@ export function RegisterPage(props){
         );
     });
 
-    
+   
     const onProfileHandler = async (event) => {
         let reader = new FileReader();
-
+        console.log(reader);
         reader.onloadend = () => {
         //읽기가 완료되면 아래코드가 실행됩니다.
         const base64 = reader.result;
@@ -176,30 +225,53 @@ export function RegisterPage(props){
             setProfile(image); // 파일 상태 업데이트 
         console.log(image);     
         }
+
+        console.log(profile);
     }
 
-    const onSubmitHandler = (event) => {
-        event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
-        
-        console.log(profile)
-        //파일이 있는 경우 formData로 넘겨야함
-        //action으로 넘겨줄 데이터
-        const formData = new FormData(); 
-        formData.append('id' , id);
-        formData.append('password', password);
-        formData.append('name', name);
-        formData.append('nickname', nickname);
-        formData.append('profile', profile)
     
-        //action을 사용할 함수
-         dispatch(userRegister(formData)).then(response => {
-             if(response.payload.Success){
-               alert('회원가입 성공')
-                 props.history.push('/login');
-             }else{
-                 alert('회원가입 실패')
-             }
-         })
+    const onSubmitHandler = (event) => {
+        console.log(profile)
+        event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
+
+        if(!idValid){
+            refID.current.focus();
+            return;
+        }else if(!passwordValid){
+            refPW.current.focus();
+            return;
+        }else if(!passwordCheckValid){
+            refPWCK.current.focus();
+            return;
+        }else if(!nameValid){
+            refName.current.focus();
+            return;
+        }else if(!nicknameValid){
+            refNick.current.focus();
+            return;
+        }else{
+            console.log(profile)
+            //파일이 있는 경우 formData로 넘겨야함
+            //action으로 넘겨줄 데이터
+            const formData = new FormData(); 
+            formData.append('id' , id);
+            formData.append('password', password);
+            formData.append('name', name);
+            formData.append('nickname', nickname);
+            formData.append('profile', profile)
+        
+            //action을 사용할 함수
+            dispatch(userRegister(formData)).then(response => {
+                if(response.payload.Success){
+                alert('회원가입 성공')
+                    props.history.push('/login');
+                }else{
+                    alert('회원가입 실패')
+                }
+            })
+        }
+
+        
     }
 
     return(
@@ -221,35 +293,42 @@ export function RegisterPage(props){
                         </div>
                         <p className="register-card-description">Sign up</p>
                         <FormGroup>
+                        <FormGroup className="profile-img">
+                        <Label>Profile</Label><br/>
+                            <img className="preview-img img-fluid img-responsive center-block rounded-circle"  src={preview} alt="preview" />
+                            <Label htmlFor="profile">
+                            <i className="fa fa-camera mb-4" aria-hidden="true"></i>
+                            </Label> 
+                            <Input type="file" name="profile" id="profile" accept="image/*"   onChange={onProfileHandler}/>
+                        </FormGroup>
+
                             <Label htmlFor="ID" className="sr-only">ID</Label>
-                            <Input type="text" name="ID" id="ID" 
+                            <Input type="text" name="ID" id="ID" innerRef={refID}
                             onChange={onIDHandler} onBlur={onIDDuplicateCheck} placeholder="*ID" defaultValue={id}/>
                             <FormText className="idmessage mb-3 mt-0 ml-1">{idMessege}</FormText>
 
                             <Label htmlFor="password" className="sr-only">Password</Label>
-                            <Input type="password" name="password" id="password" className="mb-1"
+                            <Input type="password" name="password" id="password" innerRef={refPW} className="mb-1"
                             onChange={onPasswordHandler} placeholder="*Password" defaultValue={password}/>
-                            <Input type="password" name="passwordcheck" id="passwordcheck" className="form-control" 
+                            <Input type="password" name="passwordcheck" id="passwordcheck" innerRef={refPWCK} className="form-control" 
                             onChange={onPasswordCheckHandler} placeholder="*PasswordCheck"/>
                             <FormText className="mb-3 mt-0 ml-1">{passwordMessage}</FormText>
 
                             <Label htmlFor="name" className="sr-only">*Name</Label>
-                            <Input type="text" name="name" id="name"  
+                            <Input type="text" name="name" id="name" innerRef={refName}  
                             onChange={onNameHandler} placeholder="*Name" defaultValue={name}/>
                             <FormText className="mb-3 mt-0 ml-1">{nameMessage}</FormText>
 
-
-                            <Label htmlFor="nickaname" className="sr-only">Password</Label>
-                            <Input type="text" name="name" id="name"  
-                            onChange={onNickNameHandler} placeholder="*Nickname" defaultValue={nickname}/>
-                            <FormText className="mb-3 mt-0 ml-1">{"ㅤ"}</FormText>
-
-                            <Label>Profile</Label><br/>
-                            <img className="preview-img img-fluid rounded-circle"  src={preview} alt="preview" />
-                            <Label htmlFor="profile">
-                            <i className="fa fa-upload" aria-hidden="true"></i>
-                            </Label> 
-                            <Input type="file" name="profile" id="profile" accept="image/*" onChange={onProfileHandler}/> 
+                            <div className="valid-form" >
+                                <Label htmlFor="nickaname" className="sr-only">Nickname</Label>
+                                <Input type="text" name="nickname" id="nickname"  innerRef={refNick}
+                                onChange={onNickNameHandler} placeholder="*Nickname" defaultValue={nickname}/>
+                                <Button onClick={onNicknameDuplicateCheck} className="btn confirm-btn" >
+                                    Confirm <br/>
+                                    Duplication
+                                </Button>
+                                <FormText className="mb-3 mt-0 ml-1">{nicknameMessage}</FormText>
+                            </div> 
                             
                             <Button name="register" id="register" className="btn btn-block register-btn mb-4 mt-4" 
                             onClick={onSubmitHandler}>Register</Button>
@@ -269,10 +348,51 @@ export function RegisterPage(props){
     )
 }
 
+
 const RegisterDesign = styled.header`
-    .fa-upload {
-        color: var(--FontGrey)
+    .profile-img{
+        position: relative;
     }
+
+    .fa-camera {
+        position: absolute;
+        color: var(--FontGrey);
+        top : 108px;
+        left : 70px;
+        background-color: var(--white);
+        padding:5px;
+        border-radius: 50%;
+    }
+
+
+    .fa-camera: hover{
+        cursor: pointer;
+    }
+
+    .valid-form {
+        position: relative;
+    }
+
+    .valid-form button {
+        font-weight: bold;
+        line-height: 13px;
+        font-size: 14px;
+        position: absolute;
+        top: 3px;
+        right : 0px;
+        border: none;
+        background-color: transparent;
+        color: #bbbbbb;
+        cursor: pointer;
+    }
+
+    .btn:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+  
+
     input[type="file"] {
         display : none;
     }
@@ -346,6 +466,9 @@ const RegisterDesign = styled.header`
       color: #fff;
       margin-bottom: 24px; 
     }
+
+    
+    
 
     
     .register-card .Link .Button {
