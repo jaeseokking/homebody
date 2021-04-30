@@ -84,6 +84,8 @@ function CommunityLike({board_id}) {
 export default CommunityLike;
 
 const LikeStyled1 = styled.header`
+    font-family: Noto Sans CJK KR;
+
     .fa-heart {
         color : rgb(255,100,0);
         cursor: pointer;
@@ -97,6 +99,8 @@ const LikeStyled1 = styled.header`
 `
 
 const LikeStyled2 = styled.header`
+    font-family: Noto Sans CJK KR;
+
     .fa-heart:hover {
         color : rgb(255, 100, 0);
         cursor: pointer;

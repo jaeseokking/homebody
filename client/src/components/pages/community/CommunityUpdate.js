@@ -122,6 +122,8 @@ function CommunityUpdate({history}) {
 export default  withRouter(CommunityUpdate);
 
 const UpdateStyle = styled.header`
+  
+
   .title-input {
       font-weight : bold;
       width : 100%;

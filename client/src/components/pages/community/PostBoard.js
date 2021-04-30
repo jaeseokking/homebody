@@ -97,7 +97,7 @@ function PostBoard() {
                     placeholder="title" onChange={onTitleHandler}/>     
                     
                     <textarea className="form-control" rows="5" 
-                    name="content" id="content"   placeholder="content" 
+                    name="content" id="content"  placeholder="content" 
                     onChange={onTextHandler}/>
 
                     <button type="button" className="btn btn-outline-secondary text-uppercese" 
@@ -132,8 +132,5 @@ const PostDesign = styled.header`
         display: none;
     }
 
-    .form-control {
-       
-    }
 `   
     

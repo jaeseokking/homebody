@@ -7,6 +7,7 @@ import Comments from './Comments'
 import Pagination from './Pagination';
 import Dropdown from './Dropdown';
 import CommunityLike from './CommunityLike';
+import checkdate from '../../../hoc/checkdate';
 import styled from 'styled-components';
 
 function CommunityDetails () {
@@ -79,7 +80,7 @@ function CommunityDetails () {
     
     if(list.length === 1){
       const writer = list[0].writer
-
+      const regdate = list[0].regdate
       function Image(){
         //이미지가 없는 경우 
         if(list[0].base64Image === ''){
@@ -88,7 +89,7 @@ function CommunityDetails () {
           //이미지가 있는 경우 
         }else{
           const base64Image = btoa(String.fromCharCode(...new Uint8Array(list[0].image.data))) ;
-          return  <div className="cardbox-ite d-flex my-auto">
+          return  <div className="cardbox-item my-auto">
           <img className="img-fluid ml-auto mx-auto" src={`data:image/png;base64,${base64Image}`}  alt="Image"/>
           </div>
         }
@@ -102,7 +103,7 @@ function CommunityDetails () {
           <CDDesing>
           <div className="cardform mx-auto">
           <div className="row my-5">
-          <div className="cardbox shadow-lg col-md-10  ml-auto mr-auto mb-3">  
+          <div className="cardbox shadow-lg col-md-10 ml-auto mr-auto mb-3">  
                 <div className="cardbox-heading">
                    <Dropdown postNickName={writer}></Dropdown>
                      <div className="media">
@@ -111,7 +112,7 @@ function CommunityDetails () {
                         </div>
                         <div className="media-body">
                             <p className="m-0">{writer}</p>
-                            <small><span><i className="icon ion-md-time"></i>작성시간</span></small>
+                            <small><em><i className="far fa-clock"></i>{checkdate(regdate) ? regdate.substr(10, 6) : " "+ regdate.substr(0,10)}</em></small>
                         </div>
                     </div>
                 </div>
@@ -131,12 +132,11 @@ function CommunityDetails () {
             <div className="cardbox-comment">
             <table className="comment-box">
             <tbody> 
-          
-            <Comments className="comments" list={currentPosts(commentList)} ></Comments>
+            <Comments className="comments" list={currentPosts(commentList)}></Comments>
              </tbody>
             </table>
             <div className="pagenumber">
-            <Pagination postsPerPage={postsPerPage} totalPosts={commentList.length} paginate={setCurrentPage}></Pagination>
+            <Pagination postsPerPage={postsPerPage} totalPosts={commentList.length} paginate={setCurrentPage} currentNumber={currentPage}></Pagination>
             </div>
             <div className="cardbox-comments mt-2">
                   <span className="comment-avatar">
@@ -170,6 +170,12 @@ function CommunityDetails () {
 export default CommunityDetails;
 
 const CDDesing = styled.header`
+  font-family: Noto Sans CJK KR;
+
+ em {
+   color : var(--FontGrey);
+ }
+
   Link {
     text-decoration: none;
   }
@@ -354,7 +360,7 @@ const CDDesing = styled.header`
    border: none;
    border-radius: 4px;
    font-size: 14px;
-   color: var(--FontGrey);
+   color: var(--FontDarkGrey);
    font-weight: 700;
    display: inline-block;
    width : 100%;
@@ -382,11 +388,6 @@ const CDDesing = styled.header`
   }
   
   
-  .d-flex{
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  }
   
   .search button i {
    font-size: 20px;

@@ -65,6 +65,8 @@ function Footer() {
 export default Footer;
 
 const FooterContainer = styled.footer`
+    font-family: Noto Sans CJK KR;
+
     .on-footer{
         height: 20vh;
     }

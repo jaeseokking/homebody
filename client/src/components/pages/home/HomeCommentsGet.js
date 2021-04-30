@@ -29,7 +29,7 @@ function HomeCommentsGet() {
                 const base64String = btoa(String.fromCharCode(...new Uint8Array(val.profile.data))) ;
                 return <div key={val.id}className="reviewform mx-4 my-3 row" style={{ width: '70rem'}}> 
                         <div className="userInfo my-3">
-                            <img src ={`data:image/png;base64,${base64String}`}  art='useProfile' className="mr-3"  style={{width: '35px', height: '35px'}}/><br/>
+                            <img src ={`data:image/png;base64,${base64String}`}  art='useProfile' className="mr-3 rounded-circle "  style={{width: '35px', height: '35px'}}/><br/>
                             <a>{val.nickname}</a>
                         </div>
                         <div className="comment-body col mx-5" >
@@ -44,6 +44,8 @@ function HomeCommentsGet() {
 }
 
 const ReviewDesign = styled.header`
+    font-family: Noto Sans CJK KR;
+
     p {
         word-break:break-all;
     }

@@ -4,10 +4,9 @@ import { userRegister } from '../../../_actions/user_action';
 import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import Resizer from 'react-image-file-resizer';
-import {Container, Col, Form, FormGroup, Label, Input, Button, FormText, FormFeedback } from 'reactstrap';
+import { Col, Form, FormGroup, Label, Input, Button, FormText} from 'reactstrap';
 import styled from 'styled-components';
 import { IDValid, PWValid, NameValid, NickNameValid } from './Validation';
-import axios from 'axios';
 
 export function RegisterPage(props){
     //dispatch는 Reducer에 action을 알리기 위한 함수
@@ -25,10 +24,6 @@ export function RegisterPage(props){
     const [nickname, setNickName] = useState();
     const [profile, setProfile] = useState(null);
     const [preview, setPreview] = useState("/default.png");
-
-    
-
-  
 
     const onIDHandler = (event) => {
         setID(event.target.value);
@@ -67,7 +62,7 @@ export function RegisterPage(props){
         //id를 적은 경우
         if(id !== ''){
             if(IDValid(id)){
-                setIDValid(false);
+                setIDValid(null);
                 //중복검사 하기전 메시지 없음
                 setIDMessage('ㅤ')
             }else if (!IDValid(id)){
@@ -85,7 +80,7 @@ export function RegisterPage(props){
     const onIDDuplicateCheck = (event) => {
         event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
        //유효성 검사를 통과한 경우
-        if(id !== undefined && id !== ''){
+        if(idValid === null && id !== undefined && id !== ''){
             const body = {
                 id : id 
             }
@@ -207,50 +202,60 @@ export function RegisterPage(props){
         );
     });
 
+
    
     const onProfileHandler = async (event) => {
+        console.log(profile)
         let reader = new FileReader();
-        console.log(reader);
+
         reader.onloadend = () => {
-        //읽기가 완료되면 아래코드가 실행됩니다.
-        const base64 = reader.result;
-        if (base64) {
-            //미리보기를 위한 이미지
-            setPreview(base64.toString()); // 파일 base64 상태 업데이트
-        }   
+            //읽기가 완료되면 아래코드가 실행됩니다.
+            const base64 = reader.result;
+            if (base64) {
+                //미리보기를 위한 이미지
+                setPreview(base64.toString()); // 파일 base64 상태 업데이트
+            }   
         }
+
         if (event.target.files[0]) {
             reader.readAsDataURL(event.target.files[0]); // 파일을 읽어 버퍼에 저장
             const image = await resizeFile(event.target.files[0]);
             setProfile(image); // 파일 상태 업데이트 
-        console.log(image);     
+            console.log(image);     
         }
 
-        console.log(profile);
     }
 
     
     const onSubmitHandler = (event) => {
-        console.log(profile)
+        const defaultimg = new FileReader("../public/default.png");
+        console.log(defaultimg.result)
+
         event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
 
         if(!idValid){
+            alert("아이디를 확인해주세요")
             refID.current.focus();
             return;
         }else if(!passwordValid){
+            alert("패스워드를 확인해주세요")
             refPW.current.focus();
             return;
         }else if(!passwordCheckValid){
+            alert("패스워드확인을 확인해주세요")
             refPWCK.current.focus();
             return;
         }else if(!nameValid){
+            alert("이름을 확인해주세요")
             refName.current.focus();
             return;
         }else if(!nicknameValid){
+            alert("닉네임을 확인해주세요")
             refNick.current.focus();
             return;
         }else{
-            console.log(profile)
+
+            
             //파일이 있는 경우 formData로 넘겨야함
             //action으로 넘겨줄 데이터
             const formData = new FormData(); 
@@ -280,8 +285,8 @@ export function RegisterPage(props){
         <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
         <div className="container">
             <div className="card register-card">
-                <div className="row no-gutters">
-                <div className="col-md-5">
+                <div className="row">
+                <div className="col-md-5 align">
                     <img src="./registerimage.jpg" alt="register" className="register-card-img"/>
                 </div>
                 <div className="col-md-7">
@@ -293,9 +298,9 @@ export function RegisterPage(props){
                         </div>
                         <p className="register-card-description">Sign up</p>
                         <FormGroup>
-                        <FormGroup className="profile-img">
-                        <Label>Profile</Label><br/>
-                            <img className="preview-img img-fluid img-responsive center-block rounded-circle"  src={preview} alt="preview" />
+                        <FormGroup className="profile-img mx-5">
+                        <Label className="profile mx-5 px-4">Profile</Label><br/>
+                            <img className="preview-img img-fluid rounded-circle mx-5"  src={preview} alt="preview" />
                             <Label htmlFor="profile">
                             <i className="fa fa-camera mb-4" aria-hidden="true"></i>
                             </Label> 
@@ -350,6 +355,12 @@ export function RegisterPage(props){
 
 
 const RegisterDesign = styled.header`
+    font-family: Noto Sans CJK KR;
+
+    .profile {
+        color : var(--FontGrey);
+    }
+
     .profile-img{
         position: relative;
     }
@@ -358,7 +369,7 @@ const RegisterDesign = styled.header`
         position: absolute;
         color: var(--FontGrey);
         top : 108px;
-        left : 70px;
+        left : 117px;
         background-color: var(--white);
         padding:5px;
         border-radius: 50%;

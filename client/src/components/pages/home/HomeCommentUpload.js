@@ -80,14 +80,14 @@ function Comment(props) {
 }
 
 const CommentDesign = styled.header`
-.form-control {
-    border: 1px solid #d5dae2;
-    padding: 15px 25px;
-    margin-bottom: 20px;
-    min-height: 45px;
-    font-size: 13px;
-    font-weight: normal; 
-  }
+    .form-control {
+        border: 1px solid #d5dae2;
+        padding: 15px 25px;
+        margin-bottom: 20px;
+        min-height: 45px;
+        font-size: 13px;
+        font-weight: normal; 
+    }
 `
 
 export default withRouter(Comment);

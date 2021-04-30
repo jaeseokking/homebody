@@ -60,7 +60,7 @@ function Navbar(props) {
               <Link className="nav-link text-uppercase ml-5" to="/community">community</Link>
             </li>
               <li className="nav-item">
-              <Link className="nav-link text-uppercase ml-5" to="/contacts">contact us</Link>
+              <Link className="nav-link text-uppercase ml-5" to="/about">about</Link>
             </li>
           </ul>
           <ul className="navbar-nav">
@@ -87,8 +87,9 @@ function Navbar(props) {
               <img src="/logo.png" width="120px" alt="Logo"></img>
             </Link>
           </div>
-        
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button className="navbar-toggler" type="button" data-toggle="collapse" 
+        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+        aria-expanded="false" aria-label="Toggle navigation">
           <span>
               {/*페이지 줄일때 바 색조정*/}
             <i className="fas fa-bars"/>
@@ -98,13 +99,13 @@ function Navbar(props) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav m-auto">
             <li className="nav-item active">
-              <Link className="nav-link text-uppercase ml-5" to="/">Home&nbsp;<i className="fas fa-home"></i> <span className="sr-only">(current)</span></Link>
+              <Link className="nav-link text-uppercase ml-5" to="/">News&nbsp;<i className="fas fa-home"></i> <span className="sr-only">(current)</span></Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link text-uppercase ml-5" to="/community">community</Link>
             </li>
               <li className="nav-item">
-              <Link className="nav-link text-uppercase ml-5" to="/contacts">contact us</Link>
+              <Link className="nav-link text-uppercase ml-5" to="/about">about</Link>
             </li>
           </ul>
           <div>
@@ -128,6 +129,8 @@ function Navbar(props) {
 export default withRouter(Navbar);
 
 const NavContainer = styled.footer`
+    font-family: Noto Sans CJK KR;
+
     .navbar {
       position: relative;
         background-color: var(--white);
@@ -143,10 +146,6 @@ const NavContainer = styled.footer`
       color: var(--FontDarkGrey);
     }
 
-    .logo {
-      color : var(--FontDarkGrey);
-      bold;
-    }
 
     .fas {
       color: var(--FontGrey)

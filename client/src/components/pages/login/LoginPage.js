@@ -92,6 +92,8 @@ function LoginPage(props){
 
 
 const LoginDesign = styled.header`
+    font-family: Noto Sans CJK KR;
+
     .loginform {
         background : var(--BGGrey);
     }

@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux';
 import {applyMiddleware, compose, createStore} from 'redux';
-import promiseMiddleware from 'redux-promise';
-import ReduxThunk from 'redux-thunk';
+import promiseMiddleware from 'redux-promise'; 
+import ReduxThunk from 'redux-thunk';//객체대신 함수를 생성하는 액션 생성가능
 import rootReducer from './_reducers'
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/lib/integration/react';

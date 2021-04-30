@@ -17,8 +17,11 @@ function Home() {
     
 
     return (
-    <HomeDesign>  
-         <div className="row">
+    <HomeDesign>
+        <div className="header">
+            <h1 className="display-1 font-weight-bold">NEWS</h1>
+        </div>
+        <div className="row">
         {list.map((val) => {
              return <div key={val.home_id} className="card-container mx-auto">
                 <div className="card ml-2 mr-5 my-5 mx-3" position = 'center' style={{ width: '20rem'}} >
@@ -40,15 +43,45 @@ function Home() {
 }
 
 const HomeDesign = styled.header`
-    background: linear-gradient(rgba(240, 240, 240), rgba(255, 255, 255));
+    font-family: Noto Sans CJK KR;
+    .header {
+        background-image: 
+        url("/homeheader.jpg");
+    }
+
+    
+
     text-transform: uppercase;
     text-align: center;
+
+    h1 {
+        padding: 68px;
+        color: var(--FontDarkGrey);
+    }
 
    
     .card {
         border-radius: 10px;
         overflow: hidden; 
         box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+    }
+
+    .header {
+        font-size : 100px
+    }
+
+    @media(max-width: 760px) {
+        h1, h4 {
+            color: var(--white);
+            font-size : 10vw;
+        }
+        h1 {
+            padding: 7vw;
+        }
+
+        .header{
+            background-size : 200vw;
+        }
 
     }
 `

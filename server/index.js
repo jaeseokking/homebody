@@ -214,13 +214,12 @@ app.post('/api/user/register', uploadprofile.single('profile'), (req, res) => {
 //로그인을 위한 서버
 app.post('/api/user/login', (req, res) => {
     const id = req.body.id
-    //console.log(id);
     const password = req.body.password
 
     connect();
 
     const emailCheckSQL = 'select * from user where id = ?'
-    db.query(emailCheckSQL, [id], (err, results, fields) => {
+    db.query(emailCheckSQL, [id], (err, results) => {
         if(err){
             throw err
         }else{
@@ -230,10 +229,8 @@ app.post('/api/user/login', (req, res) => {
                 })
             }else{
                 const dbPassword = results[0].pw
-                //console.log(dbPassword)
                 //이메일을 가진 멤머의 salt 값을 가져와서 
                 const salt = results[0].salt
-                //console.log(salt)
                 //입력된 비밀번호를 같은 salt로 해쉬비밀번호를 만들어서 
                 const hashPassword = crypto.createHash("sha512").update(password + salt).digest('hex');
                 if(hashPassword === dbPassword){
@@ -241,7 +238,7 @@ app.post('/api/user/login', (req, res) => {
                     const token = jwt.sign({
                         id : id
                     },secretObj.secretKey,{ //토큰만들때 사용할 비밀키 
-                        expiresIn: '60m' //토큰 유효시간 5분
+                        expiresIn: '60m' //토큰 유효시간 60분
                     })
                     //생성한 토큰을 넣어준다.
                     const updateToken = 'update user set token = ? where id = ?'
@@ -377,7 +374,7 @@ app.get('/api/community/all', (req, res, next) => {
 
     var list;
 
-    const communityAll = 'select * from community'
+    const communityAll = 'select * from community order by regdate desc'
     db.query(communityAll, (err, results, fields) => {
         if(err){
             throw err
@@ -472,7 +469,7 @@ app.post('/api/home/uploadcomment', (req, res) => {
         }
 
         currentDay();
-        const regdate = year+'-'+month+'-'+day;
+        const regdate = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 
         const profile = result[0].profile
         const insertReview = 'insert into home_comment (home_id, user_nickname, user_profile, title, content, regdate) values(?,?,?,?,?,?)'
@@ -499,10 +496,10 @@ app.post('/api/community/upload',  uploadBoard.single('image'), (req, res) => {
     //넘어온 값들을 변수로 받는다.
     const title = req.body.title
     const writer = req.body.writer
-    const description = req.body.description
+    const description = req.body.text
 
     currentDay();
-    const regdate = year+'-'+month+'-'+day;
+    const regdate = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 
     let image;
     if(req.file){
@@ -746,7 +743,7 @@ app.post('/api/community/like', (req, res) => {
             throw err
         }
         const list = results;
-        //console.log(list[0].id)
+        console.log(list)
 
         //좋아요를 누른 사람이 4보다 클경우 프로필 최대 4개만 가져오기
         if(list.length >= 4){
