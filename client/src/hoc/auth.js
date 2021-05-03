@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userAuth } from '../_actions/user_action';
 import { useCookies } from 'react-cookie';
 
-//첫번째 인자 : Component, 두번째 인자 : Component의 option                                                   //기본값이 null 이라는 표시
+//첫번째 인자 : Component(들어가는 컴포넌트), 두번째 인자 : Component의 option                                                   //기본값이 null 이라는 표시
 export default function (SpecificComponent, option){
 
     //option은 3개로 나눔
@@ -17,17 +17,17 @@ export default function (SpecificComponent, option){
         const user = useSelector(state => state.user);
         const [cookies, setCookie, removeCookie] = useCookies(['user_token']);
         
-        //user_token만 있고 state에 user loginSuccess 값이 없을 경우 쿠키 삭제
-        if(user.login === undefined && cookies !== undefined ){
-            removeCookie('user_token');
-        }
+         //user_token만 있고 state에 user loginSuccess 값이 없을 경우 쿠키 삭제
+         if(user.login === undefined){
+             removeCookie('user_token');
+         }
         
         useEffect(() => {
             
             dispatch(userAuth()).then(response => {
                 //console.log(response.payload.loginSuccess)
                 //로그인 하지 않은 상태 isAuth false
-                if(!response.payload.loginSuccess){
+                if(!response.payload.loginSuccess && cookies !== undefined){
                     if(option === true){//로그인한 사용자만 가능한 페이지 접근시
                         props.history.push('/login');
                     }
@@ -41,6 +41,8 @@ export default function (SpecificComponent, option){
                 }
             })           
         }, [])
+
+        //조건문에 해당하지 않으면 해당컴포넌트를 렌더링해줌
         return (
             <SpecificComponent/>
         )

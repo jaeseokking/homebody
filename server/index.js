@@ -329,7 +329,6 @@ app.get('/api/user/logout', (req, res)=> {
 //페이지 이동마다 사용자의 권한값을 가져오는 미들웨어
 app.get('/api/user/auth', (req, res) => {
     //유저 브라우저에 쿠키로 저장했던 토큰 가져오기 
-    
     //쿠키에 토큰이 없는경우 로그인 안한 false를 준다.
     let token = req.cookies.user_token
     if(token === undefined){

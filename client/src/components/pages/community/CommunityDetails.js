@@ -83,25 +83,25 @@ function CommunityDetails () {
       const regdate = list[0].regdate
       function Image(){
         //이미지가 없는 경우 
-        if(list[0].base64Image === ''){
-          return <div></div> ;
-
+        if(list[0].image === ''){
+          return <></> ;
           //이미지가 있는 경우 
         }else{
           const base64Image = btoa(String.fromCharCode(...new Uint8Array(list[0].image.data))) ;
-          return  <div className="cardbox-item my-auto">
+          return  <div className="image my-auto">
           <img className="img-fluid ml-auto mx-auto" src={`data:image/png;base64,${base64Image}`}  alt="Image"/>
           </div>
         }
       }
+
       const base64Profile = btoa(String.fromCharCode(...new Uint8Array(list[0].profile.data))) ;
       const UserProfile = btoa(String.fromCharCode(...new Uint8Array(loginUserProfile.data))) ;
       
       
       
       return (
-          <CDDesing>
-          <div className="cardform mx-auto">
+          <Desing>
+          <div className="container mx-auto">
           <div className="row my-5">
           <div className="cardbox shadow-lg col-md-10 ml-auto mr-auto mb-3">  
                 <div className="cardbox-heading">
@@ -152,7 +152,7 @@ function CommunityDetails () {
             </div>
             </div>
             </div>
-      </CDDesing>
+      </Desing>
       )
       
        
@@ -169,7 +169,7 @@ function CommunityDetails () {
 
 export default CommunityDetails;
 
-const CDDesing = styled.header`
+const Desing = styled.header`
   font-family: Noto Sans CJK KR;
 
  em {
@@ -204,7 +204,7 @@ const CDDesing = styled.header`
     box-shadow: none;
   }
 
-  .cardform {
+  .container {
     max-width : 1600px;
   }
 
@@ -243,6 +243,12 @@ const CDDesing = styled.header`
     height : 50px;
   }
   
+  .image{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+    
 
   .cardbox .float-right a:hover{
     background: var(--white) 

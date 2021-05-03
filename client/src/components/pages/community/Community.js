@@ -20,7 +20,7 @@ function Community () {
         const list = community.list ?? [] ;
 
         const [currentPage, setCurrentPage] = useState(1);
-        const [postsPerPage, setPostsPerPage] = useState(3);
+        const [postsPerPage, setPostsPerPage] = useState(5);
     
         const indexOfLast = currentPage * postsPerPage;
         const indexOfFirst = indexOfLast - postsPerPage;
@@ -48,8 +48,9 @@ function Community () {
                                 role="tab" data-toggle="tab">Post a board</a>  
                             </li> 
                         </ul>
+
                         <div className="tab-content mb-5">
-                            <div className="tab-pane in active text-center mt-5" 
+                            <div className="tab-pane in active text-center mt-1" 
                                 role="tabpanel"
                                 id="board">
                                  <table className="table table-striped my-5 mx-right">
@@ -81,13 +82,13 @@ function Community () {
                                     </div>
                                     
                                 </div>
+                                
                               <div className="tab-pane " id="postboard" role="tabpanel">
                                   <PostBoard/>
                             </div>
                         </div>
                     </div>                       
                 </HeaderDetails> 
-
     )
     
 
