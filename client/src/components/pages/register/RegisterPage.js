@@ -67,7 +67,7 @@ export function RegisterPage(props){
                 setIDMessage('ㅤ')
             }else if (!IDValid(id)){
                 setIDValid(false)
-                setIDMessage('사용불가')
+                setIDMessage('영어 숫자 조합 5~12 글자 가능')
             }
         //아이디를 입력하지 않은 경우 
         }else{
@@ -118,7 +118,7 @@ export function RegisterPage(props){
 
             }else if(!PWValid(password) && password !== undefined){
                 setPasswordValid(false)
-                setPasswordMessage('영문 숫자 조합 4~15 글자가능')
+                setPasswordMessage('영문 숫자 특수문자 조합 8~15 글자가능')
             }
         
         }else if(password === ''){
@@ -137,7 +137,7 @@ export function RegisterPage(props){
                 setNameMessage('사용가능한 이름')
             }else if (!NameValid(name)){
                 setNameValid(false)
-                setNameMessage('한글, 영문 사용가능.(특수기호, 공백 사용불가)')
+                setNameMessage('한글 영문 2~10 글자가능')
             }
         //아이디를 입력하지 않은 경우 
         }else if(name !== undefined){
@@ -158,7 +158,7 @@ export function RegisterPage(props){
                 setNicknameMessage('ㅤ')
             }else if (!NickNameValid(nickname)){
                 setNicknameValid(false)
-                setNicknameMessage('사용불가')
+                setNicknameMessage('한글 영문 숫자 2~10 글자가능')
             }
         //아이디를 입력하지 않은 경우 
         }else{

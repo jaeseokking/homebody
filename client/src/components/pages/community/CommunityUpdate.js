@@ -95,12 +95,16 @@ function CommunityUpdate({history}) {
           <form encType="multipart/form-data">  
                 <div className="cardbox-heading">                   
                 <input type="text" className="title-input" name="title" id="title" value={title} 
-                    placeholder="title" onChange={onTitleHandler}/>     
-                <div className="cardbox-ite d-flex my-auto">
+                    placeholder="title" onChange={onTitleHandler}/>             
+                <div className="cardbox-item d-flex my-auto">
                     <img className="img-fluid ml-auto mx-auto" src={previewImage} alt="Image"/>
-                </div>
                     <input name="file-input" id="file-input" type="file" accept="image/*" 
                     onChange={handleChangeFile}/>
+                </div>
+                    <label className="inputimage " htmlFor="file-input">
+                        <i className="fas fa-camera fa-3x" aria-hidden="true"></i>
+                    </label> 
+                   
                 <textarea className="form-control" rows="5" 
                         name="content" id="content"   placeholder="content" 
                         onChange={onDescriptionHandler} value={description}/>
@@ -123,6 +127,10 @@ export default  withRouter(CommunityUpdate);
 
 const UpdateStyle = styled.header`
   
+
+  .cardbox-item>input {
+    display: none;
+  }
 
   .title-input {
       font-weight : bold;

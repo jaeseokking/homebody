@@ -83,13 +83,13 @@ function PostBoard() {
             <PostDesign>
             <form encType="multipart/form-data">  
                 <div className="upload row mx-2">               
-                    <span className="preview" >
-                        <img src={previewImage} alt="preview" width="300px"/>
-                    <label htmlFor="file-input">
-                        <i className="fa fa-upload" aria-hidden="true"></i>
-                    </label> 
-                    <input name="file-input" id="file-input" type="file" accept="image/*"
-                    onChange={handleChangeFile}/>
+                    <span className="preview mx-auto" >
+                        <img src={previewImage} alt="preview"/><br/>
+                        <label htmlFor="file-input">
+                            <i className="fas fa-camera" aria-hidden="true"></i>
+                        </label> 
+                        <input name="file-input" id="file-input" type="file" accept="image/*"
+                        onChange={handleChangeFile}/>
                     </span>
 
                     <label htmlFor="title"></label>
@@ -116,6 +116,12 @@ export default PostBoard;
 
 
 const PostDesign = styled.header`
+    img {
+        max-width : 700px;
+        max-heigh : 700px;
+      
+    }
+
     lable {
         display: inline-block
     }
@@ -130,6 +136,13 @@ const PostDesign = styled.header`
 
     .preview>input {
         display: none;
+    }
+
+    
+  @media(max-width: 930px)  {
+        img {
+            width : 70vw;
+        }
     }
 
 `   

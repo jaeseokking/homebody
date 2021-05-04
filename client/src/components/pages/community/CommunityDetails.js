@@ -413,7 +413,5 @@ const Desing = styled.header`
   }
 
 
-  @media(max-width: 1500px)  {
-   
-  }
+
 `

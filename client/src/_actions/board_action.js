@@ -74,3 +74,13 @@ export const communityDelete =  (postid) => {
     }
 }
 
+export const communitySearch =  (searchword) => {
+    const result = Axios.post('/api/community/search', searchword)
+    .then(response => response.data)
+
+    return{
+        type : 'COMMUNITY_SEARCH',
+        payload : result
+    }
+}
+

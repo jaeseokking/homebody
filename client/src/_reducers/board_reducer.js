@@ -28,6 +28,10 @@ export default function(state = {}, action){
             return {...state, delete : action.payload}        
             break;
 
+        case 'COMMUNITY_SEARCH' :
+            return {...state, community : action.payload}        
+            break;   
+
         default:
             return state;
     }

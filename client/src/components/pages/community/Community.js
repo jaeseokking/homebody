@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { communityAll } from '../../../_actions/board_action';
+import { communityAll, communitySearch } from '../../../_actions/board_action';
 import checkdate from '../../../hoc/checkdate';
 import Pagination from './Pagination';
 import PostBoard from './PostBoard';
@@ -30,6 +30,24 @@ function Community () {
           currentPosts = list.slice(indexOfFirst, indexOfLast);
           return currentPosts;
         }
+
+        const [searchWord, setSearchWord] = useState();
+        const SearchWord = (event) => {
+            console.log(event.target.value)
+            setSearchWord(event.target.value);
+        }
+
+        const onSearchHandler = () => {
+            const body = {
+                searchword : searchWord
+            }
+            dispatch(communitySearch(body))
+        }
+
+        const onPostsPerPage = (event) => {
+            setPostsPerPage(event.target.value);
+            setCurrentPage(1);
+        }
           
         return (
              <HeaderDetails>
@@ -48,12 +66,20 @@ function Community () {
                                 role="tab" data-toggle="tab">Post a board</a>  
                             </li> 
                         </ul>
-
                         <div className="tab-content mb-5">
                             <div className="tab-pane in active text-center mt-1" 
                                 role="tabpanel"
                                 id="board">
-                                 <table className="table table-striped my-5 mx-right">
+                            <div className="selectpages row">
+                                <span className="text">Show rows</span>
+                                <select defaultValue={"5"} className="rowpages form-control" id="pages" onChange={onPostsPerPage}>
+                                    <option value="default" disabled>개수 선택</option>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                                 <table className="table table-striped mx-right">
                                     <thead>   
                                         <tr>
                                         <th width='30' scope="col">ID</th>
@@ -74,16 +100,19 @@ function Community () {
                                         })}
                                     </tbody>   
                                     </table>
+                                    <div className="search-form">
+                                        <div className="fa fa-search search-btn" id="s-btn" onClick={onSearchHandler}></div>
+                                        <input type="text" onChange={SearchWord} 
+                                        className="form-control mx-auto" id="searchinput" placeholder="검색어를 입력하세요."/>
+                                    </div>
                                     <div className="pagenumber mt-3">
                                             <Pagination postsPerPage={postsPerPage} 
                                             totalPosts={list.length} 
                                             paginate={setCurrentPage}
                                             currentNumber={currentPage}></Pagination>
                                     </div>
-                                    
                                 </div>
-                                
-                              <div className="tab-pane " id="postboard" role="tabpanel">
+                            <div className="tab-pane" id="postboard" role="tabpanel">
                                   <PostBoard/>
                             </div>
                         </div>
@@ -96,7 +125,47 @@ function Community () {
 
 const HeaderDetails = styled.header`  
     font-family: Noto Sans CJK KR;
+    .selectpages {
+        display : relative;
+    }
 
+    span{
+        display : absolute;
+        margin-left : auto;
+        margin-top :7px;
+    }
+
+    select {
+        width : 100px;
+        display : block;
+        margin-right : 20px;
+
+    }
+
+
+    .search-form {
+        margin-top : -30px;
+    }
+
+    .search-form .form-control {
+        padding-left: 1rem;
+        max-width : 300px;
+    }
+     
+    .search-form .search-btn {
+        position: absolute;
+        display: inline-block;
+        line-height: 2.375rem;
+        color: var(--FontGrey);
+    }
+
+    #s-btn {
+        cursor : pointer;
+        padding-right : 1px;
+        position: relative;
+        top: 38px;
+        left : 8em;
+      }
         
     table {
         width : 100%;

@@ -43,7 +43,7 @@ function Navbar(props) {
           </img>{nickname}</Link>
         </li>
         <li>        
-        <Link className="nav-link ml-5 my-2" to="/login" onClick={onLogoutHandler}>Logout</Link>
+        <Link className="nav-link ml-5 my-2 " to="/login" onClick={onLogoutHandler}>Logout</Link>
       </li>  
       </> 
     }else{
@@ -118,6 +118,7 @@ const NavContainer = styled.footer`
       color: var(--FontDarkGrey);
     }
 
+    
 
     .fas {
       color: var(--FontGrey)
