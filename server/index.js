@@ -46,7 +46,7 @@ function connect(){
 } 
 //데이터베이스 연결 해제 함수를 생성
 function close(){
-    console.log('myslq 연결 해제!');
+    console.log('mysql 연결 해제!');
     db.end();
 }
 
@@ -186,7 +186,7 @@ app.post('/api/user/register', uploadprofile.single('profile'), (req, res) => {
     if(req.file){
         profileurl = req.file.filename;
     }else{
-        profileurl = 'default.png'
+        profileurl = 'default.png';
     }
     //salt로 사용할 값을 만들기위해 현재날짜와 랜덤값으로 무작위변수 생성 
     const salt = Math.round(new Date().valueOf() * Math.random()) + "";
@@ -374,7 +374,7 @@ app.get('/api/community/all', (req, res, next) => {
     var list;
 
     const communityAll = 'select * from community order by regdate desc'
-    db.query(communityAll, (err, results, fields) => {
+    db.query(communityAll, (err, results) => {
         if(err){
             throw err
         }
@@ -431,20 +431,21 @@ app.post('/api/home/getcomment', (req, res) => {
     let list;
 
     connect();
-    const findComments = 'select * from home_comment where home_id = ?';
-    db.query(findComments, [home_id], (err, results, field) => {
+    const findComments = 'select A.homecomment_id, A.home_id, A.user_nickname, A.title, A.content, B.profile ' +
+    'from home_comment A inner join user B on home_id = ? and A.user_nickname = B.nickname ;';
+    db.query(findComments, [home_id], (err, results) => {
         if(err){
             throw err
         }
         console.log(results[0])
         list = results
         
-        for(i= 0 ; i < list.length ; i = i + 1){
-            var bitMap = fs.readFileSync(`./public/images/users/${list[i].user_profile}`)
-            var profilebuffer = new Buffer.from(bitMap, "base64");
+         for(i= 0 ; i < list.length ; i = i + 1){
+             var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
+             var profilebuffer = new Buffer.from(bitMap, "base64");
             list[i].profile = profilebuffer    
-        }
-        //console.log(list)
+         }
+        console.log(list)
         res.json({
             list : list
         })
@@ -504,7 +505,6 @@ app.post('/api/community/upload',  uploadBoard.single('image'), (req, res) => {
     if(req.file){
         image = req.file.filename;
     }else{
-        image = ''
     }
     
     connect()
@@ -541,7 +541,8 @@ app.post('/api/community/detail', (req, res) => {
     connect()
 
     //글 자세한 정보 가져오기
-    const findBoard = 'select * from community where board_id = ?';
+    const findBoard = 'select board_id, title, writer, description ,image , A.regdate , likecnt, profile '+
+                        'from community A join user B on board_id = 1 and A.writer = B.nickname;';
     db.query(findBoard, [board_id], (err, results) => {
         if(err){
             throw err
@@ -564,14 +565,19 @@ app.post('/api/community/detail', (req, res) => {
         list[0].profile = profileBuffer;
 
         //가져온 글의 댓글 가져오기
-        const findComments = 'select * from community_comment where board_id = ?'
+        const findComments = 'select comment_id , board_id, A.nickname, comment, profile ' + 
+                                'from community_comment A join user B on A.nickname = B.nickname';
         db.query(findComments, [board_id], (err, results) => {
+            console.log(results)
             if(err){
                 throw err
             }   
             commentList = results
             
             for(i= 0 ; i < commentList.length ; i = i + 1){
+                if(commentList[i].profile === 'default.png'){
+                    continue;
+                }
                  var bitMap = fs.readFileSync(`./public/images/users/${commentList[i].profile}`)
                  var profilebuffer = new Buffer.from(bitMap, "base64");
                  commentList[i].profile = profilebuffer    
@@ -736,7 +742,8 @@ app.post('/api/community/like', (req, res) => {
     const board_id = req.body.board_id;
     connect();
     //해당 게시글을 좋아요누른 정보들을 가져오기
-    const getLike = 'select * from community_like where board_id = ?'
+    const getLike = 'select board_id , user_nickname, profile '+
+            ' from community_like A join user B on A.user_nickname = B.nickname and board_id = ?;'
     db.query(getLike, [board_id], (err, results) => {
         if(err){
             throw err
@@ -747,10 +754,13 @@ app.post('/api/community/like', (req, res) => {
         //좋아요를 누른 사람이 4보다 클경우 프로필 최대 4개만 가져오기
         if(list.length >= 4){
             for(i= 0 ; i < 4 ; i = i + 1){
-                var bitMap = fs.readFileSync(`./public/images/users/${list[i].user_profile}`)
+                if(list[i].profile === 'default.png'){
+                    continue;
+                }
+                var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
                 var profilebuffer = new Buffer.from(bitMap, "base64");
-                list[i].profile = profilebuffer}
-        
+                list[i].profile = profilebuffer
+            }
         //좋아요 4미만일 경우 
         }else{
             for(i= 0 ; i < list.length ; i = i + 1){
@@ -842,6 +852,24 @@ app.post('/api/community/likeupdate', (req, res) => {
     }
  
 
+})
+
+app.post('/api/community/search', (req, res) => {
+    const searchword = '%' + req.body.searchword + '%';
+    let list;
+
+    connect();
+    const searchtitle = 'select * from community where title like ? order by regdate desc'
+    db.query(searchtitle, [searchword], (err, results) => {
+        if(err){
+            throw err
+        }
+        list = results
+        res.json({
+            list : list
+        })
+        close();
+    })
 })
 
 app.get('/', (req, res) => {
