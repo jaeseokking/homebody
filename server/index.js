@@ -159,7 +159,6 @@ app.post('/api/register/nicknamecheck', (req, res) => {
         if(err){
             throw err
         }
-        console.log(result[0]);
         //중복되지 않은 경우 
         if(result[0] === undefined){
             res.json({
@@ -279,9 +278,9 @@ app.post('/api/user/login', (req, res) => {
                 })
             }
         }
-        
         }
         close();
+
     })
 
 
@@ -400,8 +399,9 @@ app.get('/api/home/all', (req, res, next) => {
         res.json({
             list : list
         })
-        close();
     })
+    close();
+
 })
 
 
@@ -426,7 +426,6 @@ app.post('/api/home/detail', (req, res) => {
 
 
 app.post('/api/home/getcomment', (req, res) => {
-    //console.log(req.body.home_id);
     const home_id = req.body.home_id
     let list;
 
@@ -437,7 +436,6 @@ app.post('/api/home/getcomment', (req, res) => {
         if(err){
             throw err
         }
-        console.log(results[0])
         list = results
         
          for(i= 0 ; i < list.length ; i = i + 1){
@@ -445,7 +443,6 @@ app.post('/api/home/getcomment', (req, res) => {
              var profilebuffer = new Buffer.from(bitMap, "base64");
             list[i].profile = profilebuffer    
          }
-        console.log(list)
         res.json({
             list : list
         })
@@ -459,30 +456,20 @@ app.post('/api/home/uploadcomment', (req, res) => {
     const user_nickname = req.body.nickname
     const title = req.body.title
     const content = req.body.content
-
+    currentDay();
+    const regdate = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 
     connect();
-    const findProfile = 'select profile from user where nickname = ?'
-    db.query(findProfile, [user_nickname], (err, result, field) => {
+    const insertReview = 'insert into home_comment (home_id, user_nickname, title, content, regdate) values(?,?,?,?,?)'
+    db.query(insertReview, [home_id, user_nickname, title, content, regdate], (err, result, field) => {
         if(err){
             throw err
         }
-
-        currentDay();
-        const regdate = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
-
-        const profile = result[0].profile
-        const insertReview = 'insert into home_comment (home_id, user_nickname, user_profile, title, content, regdate) values(?,?,?,?,?,?)'
-        db.query(insertReview, [home_id, user_nickname, profile, title, content, regdate], (err, result, field) => {
-            if(err){
-                throw err
-            }
-
-            close();
-            res.json({
-                Success : true
-            })
+        close();
+        res.json({
+            Success : true
         })
+    
 
     })
 
@@ -505,44 +492,36 @@ app.post('/api/community/upload',  uploadBoard.single('image'), (req, res) => {
     if(req.file){
         image = req.file.filename;
     }else{
+        image = '';
     }
     
     connect()
-    //회원 프로필 이미지 가져오기
-    const getProfile = 'select profile from user where nickname = ?'
-    db.query(getProfile, [writer], (err, result, field) => {
+    const insertBoard = 'insert into community(title, writer, description, regdate, image)'
+        + 'values(?,?,?,?,?)';
+    db.query(insertBoard, [title, writer, description, regdate, image], (err, results)=> {
         if(err){
-            throw err
+            throw err;
         }
-        const profile = result[0].profile;
-
-        const insertBoard = 'insert into community(title, writer, description, regdate, profile, image)'
-         + 'values(?,?,?,?,?,?)';
-        db.query(insertBoard, [title, writer, description, regdate, profile, image], (err, results)=> {
-            if(err){
-                throw err;
-            }
-            if(results.affectedRows === 1){
-                res.json({ Success : true})
-                console.log('업로드 완료')
-            }else{
-                res.json({ Success : false})
-                console.log('업로드 실패')
-            }
-            close();
-        })
-    }) 
+        if(results.affectedRows === 1){
+            res.json({ Success : true})
+            console.log('업로드 완료')
+        }else{
+            res.json({ Success : false})
+            console.log('업로드 실패')
+        }
+        close();
+    })
+    
     
 })
 
 app.post('/api/community/detail', (req, res) => {
     const board_id = req.body.board_id
     let list;
-    connect()
-
+    connect();
     //글 자세한 정보 가져오기
     const findBoard = 'select board_id, title, writer, description ,image , A.regdate , likecnt, profile '+
-                        'from community A join user B on board_id = 1 and A.writer = B.nickname;';
+                        'from community A join user B on board_id = ? and A.writer = B.nickname;';
     db.query(findBoard, [board_id], (err, results) => {
         if(err){
             throw err
@@ -550,9 +529,7 @@ app.post('/api/community/detail', (req, res) => {
 
         let bitMapimage;
         let imageBuffer;
-
         list = results
-        //console.log(list[0].image)
         //게시물에 image가 있는 경우
         if(list[0].image !== ''){
             bitMapimage = fs.readFileSync(`./public/images/board/${list[0].image}`);
@@ -560,41 +537,37 @@ app.post('/api/community/detail', (req, res) => {
             list[0].image = imageBuffer;
         }
 
-        const bitMapProfile = fs.readFileSync(`./public/images/users/${list[0].profile}`);
-        const profileBuffer = new Buffer.from(bitMapProfile, "base64");
-        list[0].profile = profileBuffer;
-
-        //가져온 글의 댓글 가져오기
-        const findComments = 'select comment_id , board_id, A.nickname, comment, profile ' + 
-                                'from community_comment A join user B on A.nickname = B.nickname';
-        db.query(findComments, [board_id], (err, results) => {
-            console.log(results)
-            if(err){
-                throw err
-            }   
-            commentList = results
-            
-            for(i= 0 ; i < commentList.length ; i = i + 1){
-                if(commentList[i].profile === 'default.png'){
-                    continue;
-                }
-                 var bitMap = fs.readFileSync(`./public/images/users/${commentList[i].profile}`)
-                 var profilebuffer = new Buffer.from(bitMap, "base64");
-                 commentList[i].profile = profilebuffer    
-            }
-            //console.log(commentList);
-            //console.log(list)
-            //console.log(commentList)
-            res.json({
-                list : list,
-                commentList : commentList
-            })
-        
-        })
-
-       
-      close();  
+        if(list[0].profile !== 'default.png'){
+            const bitMapProfile = fs.readFileSync(`./public/images/users/${list[0].profile}`);
+            const profileBuffer = new Buffer.from(bitMapProfile, "base64");
+            list[0].profile = profileBuffer;
+        }
     })
+       
+    //가져온 글의 댓글 가져오기
+    const findComments = 'select comment_id , board_id, A.nickname, comment, profile ' + 
+                            'from community_comment A join user B on board_id = ? and A.nickname = B.nickname ';
+    db.query(findComments, [board_id], (err, results) => {
+        if(err){
+            throw err
+        }   
+        commentList = results
+        
+        for(i= 0 ; i < commentList.length ; i = i + 1){
+            if(commentList[i].profile === 'default.png'){
+                continue;
+            }
+                var bitMap = fs.readFileSync(`./public/images/users/${commentList[i].profile}`)
+                var profilebuffer = new Buffer.from(bitMap, "base64");
+                commentList[i].profile = profilebuffer    
+        }
+        res.json({
+            list : list,
+            commentList : commentList
+        })     
+    })  
+    close();   
+    
 })
 
 app.post('/api/community/uploadcomment', (req, res) => {
@@ -602,25 +575,20 @@ app.post('/api/community/uploadcomment', (req, res) => {
     const comment = req.body.comment;
     const nickname = req.body.nickname;
 
-    const findProfile = 'select profile from user where nickname = ?';
     connect();
-    db.query(findProfile, [nickname], (err, result) => {
+   
+    const insertComment = 'insert into community_comment(board_id, nickname, comment) '+
+    'values(?,?,?)'
+    db.query(insertComment, [board_id, nickname, comment], (err, results) => {
         if(err){
             throw err
         }
-        const profile = result[0].profile;
-        const insertComment = 'insert into community_comment(board_id, nickname, comment, profile) '+
-        'values(?,?,?,?)'
-        db.query(insertComment, [board_id, nickname, comment, profile], (err, results) => {
-            if(err){
-                throw err
-            }
 
-            res.json({
-                Success : true
-            })
+        res.json({
+            Success : true
         })
     })
+
     
 })
 
@@ -749,8 +717,6 @@ app.post('/api/community/like', (req, res) => {
             throw err
         }
         const list = results;
-        console.log(list)
-
         //좋아요를 누른 사람이 4보다 클경우 프로필 최대 4개만 가져오기
         if(list.length >= 4){
             for(i= 0 ; i < 4 ; i = i + 1){
@@ -764,7 +730,10 @@ app.post('/api/community/like', (req, res) => {
         //좋아요 4미만일 경우 
         }else{
             for(i= 0 ; i < list.length ; i = i + 1){
-                var bitMap = fs.readFileSync(`./public/images/users/${list[i].user_profile}`)
+                if(list[i].profile === 'default.png'){
+                    continue;
+                }
+                var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
                 var profilebuffer = new Buffer.from(bitMap, "base64");
                 list[i].profile = profilebuffer    
             }
@@ -779,6 +748,7 @@ app.post('/api/community/like', (req, res) => {
 })
 
 app.post('/api/community/likeupdate', (req, res) => {
+    console.log(req.body);
     const likeCheck = req.body.likeCheck
     const user_nickname = req.body.nickname;
     const board_id = req.body.board_id
@@ -792,7 +762,7 @@ app.post('/api/community/likeupdate', (req, res) => {
             }
         })
 
-        const findLike = 'select likecnt from community board_id'
+        const findLike = 'select likecnt from community where board_id = ?'
         db.query(findLike, [board_id], (err, result) => {
             if(err){
                 throw err
@@ -813,32 +783,20 @@ app.post('/api/community/likeupdate', (req, res) => {
     //좋아요를 누른 경우
     }else{
         connect()
-        const findProfile = 'select profile from user where nickname = ?'
-        db.query(findProfile, [user_nickname], (err, result) => {
+        const like = 'insert into community_like (board_id, user_nickname) ' +
+        'values(?,?)';
+        db.query(like, [board_id, user_nickname], (err, result) => {
             if(err){
                 throw err
-            }
-
-            const user_profile = result[0].profile
-            const like = 'insert into community_like (board_id, user_nickname, user_profile) ' +
-            'values(?,?,?)';
-            db.query(like, [board_id, user_nickname, user_profile], (err, result) => {
-                if(err){
-                    throw err
-                }
-               
-            })
+            }           
         })
        
-
-
-        const findLike = 'select likecnt from community board_id'
+        const findLike = 'select likecnt from community where board_id = ?'
         db.query(findLike, [board_id], (err, result) => {
             if(err){
                 throw err
             }
             const currentLikecnt = result[0].likecnt + 1;
-
             const decreaseLike = 'update community set likecnt = ? where board_id = ?'
             db.query(decreaseLike, [currentLikecnt, board_id], (err, result) => {
                 if(err){

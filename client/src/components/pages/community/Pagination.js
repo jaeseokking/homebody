@@ -1,25 +1,60 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
     //page번호를 지정할 리스트 생성
-    const pageNumbers = [];
+    var pageNumbers = [];
     //1 부터 Math.ceil 올림을 사용해서 총개수/한페이지당 보여질 개수 만큼 페이지 번호를 list에 추가
     for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
         pageNumbers.push(i);
     }
-    console.log(currentNumber)
+    
+    const [pageOfPage , setPageOfPage] = useState(1);
+    const [Per, setPer] = useState(2);
+    var LastPage = pageOfPage * Per;
+    var FirstPage = LastPage - Per;
+
+    const totalPageOfPage = Math.ceil(totalPosts/postsPerPage/Per);
+    
+    useEffect(() => {
+        LastPage = pageOfPage * Per;
+        FirstPage = LastPage - Per;
+        paginate(FirstPage + 1);
+    },[pageOfPage])
+  
+
+    if(pageNumbers.length > 5){
+        pageNumbers = pageNumbers.slice(FirstPage , LastPage)
+    }
+
+    const onNextHandler = () => {
+        setPageOfPage(pageOfPage + 1);
+    }
+
+    const onBackHandler = () => {
+        setPageOfPage(pageOfPage - 1);
+    }
+    
+    console.log(FirstPage, LastPage);
+    console.log(currentNumber);
+    console.log(totalPageOfPage)
     return (
         <PaginationDesign>
         <table>
             <tbody>
                 <tr className="page-item row ">
+                {pageOfPage > 1 ? <td className="page-link" onClick={onBackHandler}>
+                <i class="fas fa-angle-left"></i> 
+                </td> : <></>}
                 {pageNumbers.map(number => (
                         <td key={number} onClick={() => paginate(number)} 
                             className={number !== currentNumber ? "page-link" : "page-link c"}>
                             {number}
                         </td>
                 ))}
+                {totalPageOfPage > pageOfPage ? <td className="page-link" onClick={onNextHandler}>
+                    <i class="fas fa-angle-right"></i> 
+                </td> : <></>}
                 </tr>
             </tbody>   
         </table>
@@ -30,6 +65,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
 
 const PaginationDesign = styled.header`
     font-family: Noto Sans CJK KR;
+    .fas {
+       font-size : 1rem;
+    }
+
+    .fas: hover {
+        color : var(--white);
+    }
 
    .page-item {   
         justify-content: center;

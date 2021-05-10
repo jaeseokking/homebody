@@ -31,7 +31,6 @@ function Navbar(props) {
   let profileimg;
 
   const [cookies, setCookie, removeCookie] = useCookies(['user_token']);
-  console.log(cookies)
   //로그인 확인되었을 경우 
   const LoginCheck = () => {
 

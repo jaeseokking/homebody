@@ -84,27 +84,26 @@ function CommunityUpdate({history}) {
                 alert('게시글 수정 실패')
              }
         })
-
-
     }
 
     return (
-        <UpdateStyle>
+        <Styled>
         <div className="row my-5">
-          <div className="cardbox shadow-lg col-md-10  ml-auto mr-auto mb-3">  
+          <div className="cardbox shadow-lg col-md-10 mx-auto mb-3">  
           <form encType="multipart/form-data">  
                 <div className="cardbox-heading">                   
                 <input type="text" className="title-input" name="title" id="title" value={title} 
-                    placeholder="title" onChange={onTitleHandler}/>             
-                <div className="cardbox-item d-flex my-auto">
-                    <img className="img-fluid ml-auto mx-auto" src={previewImage} alt="Image"/>
+                    placeholder="title" onChange={onTitleHandler}/> 
+
+                <div className="d-flex row">
+                    <img className="img-fluid px-3" src={previewImage} alt="Image"/><br/>
                     <input name="file-input" id="file-input" type="file" accept="image/*" 
                     onChange={handleChangeFile}/>
+                    <label className="inputimage" htmlFor="file-input">
+                        <i className="fas fa-camera fa-2x mx-auto" ></i>
+                    </label>
                 </div>
-                    <label className="inputimage " htmlFor="file-input">
-                        <i className="fas fa-camera fa-3x" aria-hidden="true"></i>
-                    </label> 
-                   
+                    
                 <textarea className="form-control" rows="5" 
                         name="content" id="content"   placeholder="content" 
                         onChange={onDescriptionHandler} value={description}/>
@@ -119,16 +118,20 @@ function CommunityUpdate({history}) {
             </form>
             </div>
         </div>
-        </UpdateStyle>
+        </Styled>
     )
 }
 
 export default  withRouter(CommunityUpdate);
 
-const UpdateStyle = styled.header`
+const Styled = styled.header`
   
+  lable {
+    display: inline-block;
+    width : 100%;
+  }
 
-  .cardbox-item>input {
+  .d-flex>input {
     display: none;
   }
 
@@ -143,170 +146,17 @@ const UpdateStyle = styled.header`
    max-width : 720px;
    background : var(--white);
    border-radius: 10px;
-   margin: 0;
   }
 
   .cardbox .cardbox-heading {
-    padding: 16px;
-    margin: 0;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
-
- 
-  .cardbox-comment {
-    padding : 16px;
-    margin-top : 2em;
-    margin-bottom : 2em;
-  }
-
-
-
-  .media-body p{
-    font-weight: 500 !important;
-    font-size: 14px;
-  }
-  
-  .media-body small span{
-    font-size: 12px;
-    color: #aaa;
-    margin-right: 10px;
-  }
-  
-  
-  .cardbox .cardbox-item {
-      position: relative;
-     
-  }
-
-  .cardbox .cardbox-item img{
-    
-  }
-
-
-
-  .cardbox-base ul{
-   margin: 10px 0px 10px -20px!important; 
-   font-size: 0px;	
-    display: inline-block;
-  }
-
-  .cardbox-base li {
-    list-style: none;
-    margin: 0px 0px 0px -8px ;
-    padding: 0px 0px 0px 0px ;
-    display: inline-block;
-  }
-  
-  
-  .cardbox-base li a i{
-   position: relative;
-   top: 4px; 
-   font-size: 16px;
-   color: #8d8d8d;
-  }
-
-  .cardbox-base li a span{
-   font-size: 14px;
-   color: #8d8d8d;
-   margin-left: 20px;
-   position: relative;
-   top: 5px; 
-  }
-  .cardbox-base li a em{
-   font-size: 14px;
-   color: #8d8d8d;
-   position: relative;
-   top: 3px; 
-  }
-
-  .cardbox-base li a img{
-    width: 25px;
-    height: 25px;
-    border: 2px solid #fff;
-  }
-  
-  
-  .cardbox-comments{
-    padding: 10px 40px 20px 40px !important;
-    font-size: 0px;	
-    text-align: left;
-    margin-right: 10px
-  }
-
-  .cardbox-comments .comment-avatar img{
-    margin-top: 2px;
-    margin-left : -30px;
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-  }
-  
-  table {
-    width : 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-  }
-
- 
-
-
-  td {
-    vertical-align:top;
-
-  }
-
-
-  
-  .cardbox-comments .comment-body {
-    
-    overflow: auto;
-  }
-
-  .search {
-   position: relative;
-   right: -40px;
-   top: -40px;
-   margin-bottom: -40px;
-   margin-right: 10px;
-   border: 2px solid #f4f4f4;	
-   width: 100%;
-   overflow: hidden;
-   display: inline-block;
-
-  }
-
-  .search input[type="text"] {
-   background-color: #fff;
-   line-height: 10px;
-   padding: 15px 0px 20px 20px;
-   border: none;
-   border-radius: 4px;
-   font-size: 14px;
-   color: var(--FontGrey);
-   font-weight: 700;
-   display: inline-block;
-   width : 100%;
-  }
-
-
-
-  .search button {
-   position: absolute;
-   right: 0;
-   top: 0px;
-   border: none;
-   background-color: transparent;
-   color: #bbbbbb;
-   padding: 15px 25px;
-   cursor: pointer;
-  }
-  
-  
-  .d-flex{
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  .d-flex {
+    justify-content: center;
+    align-items: center;
+    display : inline-block;
   }
   
   .search button i {
@@ -315,19 +165,4 @@ const UpdateStyle = styled.header`
    display: block;
   }
   
-  
-
-  .author a{
-   font-size: 16px;
-   color: #00C4CF;
-  }
-  .author p{
-   font-size: 16px;
-   color: #8d8d8d;
-  }
-
-
-  @media(max-width: 1500px)  {
-   
-  }
 `

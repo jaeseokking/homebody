@@ -9,6 +9,7 @@ import Dropdown from './Dropdown';
 import CommunityLike from './CommunityLike';
 import checkdate from '../../../hoc/checkdate';
 import styled from 'styled-components';
+import { communityLikeGet } from '../../../_actions/like_action';
 
 function CommunityDetails () {
     let { board_id } = useParams();
@@ -23,17 +24,26 @@ function CommunityDetails () {
       dispatch(communityDetail(body))
     }, [])
 
+    useEffect(() => {
+      dispatch(communityLikeGet(body))
+    }, [])
+
     
     const board =  useSelector(state => state.board);
     const user =  useSelector(state => state.user);
+    const like = useSelector(state => state.like);
+
 
     const detail = board.detail ?? {};
+    const likedetail = like.detail ?? {};
 
     //게시글
     const list = detail.list ?? [];
-
     //댓글 리스트
     const commentList = detail.commentList ?? [];
+
+    //좋아요 리스트
+    const likelist = likedetail.list ?? [];
 
     const login = user.login ?? {};
     const loginUserProfile = login.profile ?? {} ;
@@ -77,7 +87,7 @@ function CommunityDetails () {
       return currentPosts;
     }
 
-    
+      
     if(list.length === 1){
       const writer = list[0].writer
       const regdate = list[0].regdate
@@ -89,7 +99,7 @@ function CommunityDetails () {
         }else{
           const base64Image = btoa(String.fromCharCode(...new Uint8Array(list[0].image.data))) ;
           return  <div className="image my-auto">
-          <img className="img-fluid ml-auto mx-auto" src={`data:image/png;base64,${base64Image}`}  alt="Image"/>
+          <img className="img-fluid" src={`data:image/png;base64,${base64Image}`}  alt="Image"/>
           </div>
         }
       }
@@ -97,10 +107,10 @@ function CommunityDetails () {
       const base64Profile = btoa(String.fromCharCode(...new Uint8Array(list[0].profile.data))) ;
       const UserProfile = btoa(String.fromCharCode(...new Uint8Array(loginUserProfile.data))) ;
       
-      
+      const Style = commentList.length > 0 ? CStyle : nonStyle;
       
       return (
-          <Desing>
+          <Styled>
           <div className="container mx-auto">
           <div className="row my-5">
           <div className="cardbox shadow-lg col-md-10 ml-auto mr-auto mb-3">  
@@ -108,7 +118,11 @@ function CommunityDetails () {
                    <Dropdown postNickName={writer}></Dropdown>
                      <div className="media">
                         <div className="d-flex">
-                            <a href=""><img className="writer-img img-fluid rounded-circle mx-1" src={`data:image/png;base64,${base64Profile}`} alt="User"/></a>
+                            <a href="">
+                              <img className="writer-img img-fluid rounded-circle mx-1" 
+                              src={base64Profile ? `data:image/png;base64,${base64Profile}` : '/default.png'} 
+                              alt="User"/>
+                            </a>
                         </div>
                         <div className="media-body">
                             <p className="m-0">{writer}</p>
@@ -121,10 +135,12 @@ function CommunityDetails () {
                 <p>{list[0].description}</p>
                 <div className="cardbox-base">
                     <ul className="float-right">
+                      <Style>
                       <li><a><i className="fa fa-comments mr-2"></i></a></li>
                       <li><a><em className="mr-2 ml-1">{commentList.length}</em></a></li>
+                      </Style>
                     </ul>
-                    <CommunityLike board_id={list[0].board_id} likecnt={list[0].likecnt}/>   
+                    <CommunityLike likeList={likelist} likecnt={list[0].likecnt}/>   
                 </div>
             </div>
           
@@ -133,6 +149,7 @@ function CommunityDetails () {
             <table className="comment-box">
             <tbody> 
             <Comments className="comments" list={currentPosts(commentList)}></Comments>
+            
              </tbody>
             </table>
             <div className="pagenumber">
@@ -152,7 +169,7 @@ function CommunityDetails () {
             </div>
             </div>
             </div>
-      </Desing>
+      </Styled>
       )
       
        
@@ -169,12 +186,12 @@ function CommunityDetails () {
 
 export default CommunityDetails;
 
-const Desing = styled.header`
+const Styled = styled.header`
   font-family: Noto Sans CJK KR;
 
- em {
-   color : var(--FontGrey);
- }
+  em {
+    color : var(--FontGrey);
+  }
 
   Link {
     text-decoration: none;
@@ -213,14 +230,7 @@ const Desing = styled.header`
   }
 
 
-  .fa-heart:hover {
-    color : rgb(255,100,0);
-    cursor: pointer;
-  }
-
-  .fa-comments: hover {
-    color : rgb(0,100, 255);
-  }
+  
 
   .cardbox {
    max-width : 720px;
@@ -263,10 +273,6 @@ const Desing = styled.header`
   .cardbox .cardbox-item {
       position: relative;
      
-  }
-
-  .cardbox .cardbox-item img{
-    
   }
 
   .cardbox-base ul{
@@ -401,17 +407,14 @@ const Desing = styled.header`
    display: block;
   }
   
-  
 
-  .author a{
-   font-size: 16px;
-   color: #00C4CF;
+`
+
+const CStyle = styled.body`
+  .fa-comments {
+    color : rgb(0,100, 255);
   }
-  .author p{
-   font-size: 16px;
-   color: #8d8d8d;
-  }
+`
 
-
-
+const nonStyle = styled.body `
 `

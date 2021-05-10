@@ -93,11 +93,11 @@ function PostBoard() {
                     </span>
 
                     <label htmlFor="title"></label>
-                    <input type="text" className="form-control" name="title" id="title" value={title} 
-                    placeholder="title" onChange={onTitleHandler}/>     
+                    <input type="text" className="form-control mb-2" name="title" id="title" value={title} 
+                    placeholder="제목을 입력해 주세요" onChange={onTitleHandler}/>     
                     
-                    <textarea className="form-control" rows="5" 
-                    name="content" id="content"  placeholder="content" 
+                    <textarea className="form-control mb-2" rows="5" 
+                    name="content" id="content"  placeholder="내용을 입력해 주세요" 
                     onChange={onTextHandler}/>
 
                     <button type="button" className="btn btn-outline-secondary text-uppercese" 
@@ -116,6 +116,16 @@ export default PostBoard;
 
 
 const PostDesign = styled.header`
+
+    .form-control {
+        border: 1px solid #d5dae2;
+        padding: 15px 25px;
+        margin-bottom: 20px;
+        min-height: 45px;
+        font-size: 15px;
+        font-weight: normal; 
+    }
+
     img {
         max-width : 700px;
         max-heigh : 700px;
@@ -124,10 +134,6 @@ const PostDesign = styled.header`
 
     lable {
         display: inline-block
-    }
-
-    .preview {
-       
     }
 
     .image-upload {

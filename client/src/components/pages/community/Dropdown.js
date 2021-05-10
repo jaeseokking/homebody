@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
-import {communityDelete} from '../../../_actions/board_action';
+import { Link, withRouter } from 'react-router-dom';
+import { communityDelete } from '../../../_actions/board_action';
 
 
 function Dropdown ({postNickName, history}) {
@@ -9,7 +9,8 @@ function Dropdown ({postNickName, history}) {
 
     const user = useSelector(state => state.user);
     const board = useSelector(state => state.board);
-
+    const login = user.login ?? {};
+    const loginUserNickname = login.nickname ?? "";
     const body = {
         board_id : board.detail.list[0].board_id
     }
@@ -30,7 +31,7 @@ function Dropdown ({postNickName, history}) {
         }
     }
     //로그인한 유저와 게시글을 올린 유저가 같을경우 드롭다운을 생성
-    if(user.login.nickname === postNickName){
+    if(loginUserNickname === postNickName){
         return (
             <div>
                 <div className="dropdown float-right">
@@ -48,9 +49,9 @@ function Dropdown ({postNickName, history}) {
         )
     }else{
         return(
-            <div>
+            <>
                 {/* 일치하지 않을 경우 아무것도 렌더링하지 않음 */}
-            </div>
+            </>
         )
     }
    

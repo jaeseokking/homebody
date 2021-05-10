@@ -24,7 +24,7 @@ function Home() {
         <div className="row">
         {list.map((val) => {
              return <div key={val.home_id} className="card-container mx-auto">
-                <div className="card ml-2 mr-5 my-5 mx-3" position = 'center' style={{ width: '20rem'}} >
+                <div className="card ml-2 my-5 mx-3" position = 'center' style={{ width: '20rem'}} >
                   <img src={"/images/"+val.image} alt={val.headertitle} className="card-img"/>
                   <div className="card-body">
                       <h3   className="card-title text-uppercase">{val.headertitle}</h3>

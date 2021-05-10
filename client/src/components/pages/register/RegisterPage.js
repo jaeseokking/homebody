@@ -281,7 +281,7 @@ export function RegisterPage(props){
 
     return(
         <div className="registerform">
-        <RegisterDesign>
+        <Styled>
         <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
         <div className="container">
             <div className="card register-card">
@@ -296,7 +296,7 @@ export function RegisterPage(props){
                         <div className="logo-wrapper">
                             <img src="/logo.png" width="150px" alt="logo" className="logo"/>
                         </div>
-                        <p className="register-card-description">Sign up</p>
+                        <p className="register-card-description">Register</p>
                         <FormGroup>
                         <FormGroup className="profile-img mx-5">
                         <Label className="profile mx-5 px-4">Profile</Label><br/>
@@ -347,14 +347,14 @@ export function RegisterPage(props){
             </div>
             </div>
         </main>
-        </RegisterDesign>
+        </Styled>
     </div>
        
     )
 }
 
 
-const RegisterDesign = styled.header`
+const Styled = styled.header`
     font-family: Noto Sans CJK KR;
 
     .profile {

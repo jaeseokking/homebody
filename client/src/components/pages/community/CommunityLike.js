@@ -1,83 +1,105 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
-import { communityLikeGet, communityLikeUpdate} from '../../../_actions/like_action'
+import { communityLikeUpdate} from '../../../_actions/like_action'
 import styled from 'styled-components';
 
-function CommunityLike({board_id}) {
+
+function CommunityLike({likeList, likecnt}) {
+
     const dispatch = useDispatch();
 
-    const body = {
-        board_id : board_id
-    }
-
     const login = useSelector(state => state.user.login ?? {} );
+    const detail = useSelector(state => state.board.detail ?? {});
+    const list = detail.list[0];
 
     const loginUserNickname = login.nickname;
-    useEffect(() => {
-        console.log(loginUserNickname);
-        dispatch(communityLikeGet(body)).then(response => {
-            console.log(response.payload.list)
-            response.payload.list.map((val) => {
-                if(val.user_nickname === loginUserNickname){
-                    setLikeCheck(true)
-                    setStyle(LikeStyled1);
-                    console.log('좋아요 누른 상태')
-                }
-            })
-        })      
-    }, [])
-
-    const detail = useSelector(state => state.like.detail ?? {});
-
-    const list = detail.list ?? [];
-    const board_detail = useSelector(state => state.board.detail ?? {});
-    const board_list = board_detail.list[0] ?? [];
-    const likecnt = board_list.likecnt;
-  
 
     const [likeCount, setLikeCount] = useState(likecnt);
     const [likeCheck, setLikeCheck] = useState(false);
     const [Style, setStyle] = useState(LikeStyled2);
 
+    useEffect(() => {
+        if(likeList.length > 0){
+            console.log(likeList[0].board_id, list.board_id)
+            if(likeList[0].board_id == list.board_id){
+                likeList.map((val) =>{
+                    if(val.user_nickname === loginUserNickname){
+                        setLikeCheck(true)
+                        setStyle(LikeStyled1);
+                        console.log('좋아요 누른 상태')
+                    } 
+                })
+            }else{
+                setLikeCheck(false)
+                setStyle(LikeStyled2)
+                console.log('좋아요 누르지 않은 상태');
+            }
+        }else{
+            setLikeCheck(false)
+            setStyle(LikeStyled2)
+            console.log('좋아요 누르지 않은 상태');
+        }
+    },[likeList])
 
-    const onLikeHandler = async () => {
-        if(likeCheck){
+   useEffect(() => {
+     setLikeCount(likecnt)
+   },[likecnt])  
+
+    const onLikeHandler = () => {
+        let body
+        if(likeCheck  == true){
             setLikeCheck(false)
             setLikeCount(likeCount -1);
             setStyle(LikeStyled2)
+            body = {
+                likeCheck : likeCheck,
+                nickname : loginUserNickname,
+                board_id : list.board_id
+            }
         }else{
             setLikeCheck(true)
             setLikeCount(likeCount + 1);
             setStyle(LikeStyled1)
-        }
-
-        console.log(likeCheck)
-        const body = {
-            likeCheck : likeCheck,
-            nickname : loginUserNickname,
-            board_id : board_id            
+            body = {
+                likeCheck : likeCheck,
+                nickname : loginUserNickname,
+                board_id : list.board_id
+            }
         }
 
         dispatch(communityLikeUpdate(body))
 
     }
-    
-    return (
-        <div> 
+
+  
+    if(likeList.length > 0 ){
+        return (
+            <div> 
+                <ul className="row">
+                    <Style><li><a><i className="fa fa-heart mr-3" onClick={onLikeHandler}></i></a></li>
+                    {likeList.slice(0, 4).map((val) => {
+                        const profile = btoa(String.fromCharCode(...new Uint8Array(val.profile.data))) ;
+                        return <li key={val.id}>
+                            <a href="#"><img src={profile ? `data:image/png;base64,${profile}` : '/default.png'} className="img-fluid rounded-circle" alt="User"/></a>
+                            </li>
+                        
+                    })}
+                    <li><a><span>{likeCount} Like</span></a></li>
+                    </Style>
+                </ul>
+            </div>
+        )
+    }else{
+        return (
             <ul className="row">
-               <Style><li><a><i className="fa fa-heart mr-3" onClick={onLikeHandler}></i></a></li>
-                {list.slice(0, 4).map((val) => {
-                    const profile = btoa(String.fromCharCode(...new Uint8Array(val.profile.data))) ;
-                    return <li key={val.id}>
-                        <a href="#"><img src={`data:image/png;base64,${profile}`} className="img-fluid rounded-circle" alt="User"/></a>
-                        </li>
-                    
-                })}
-                <li><a><span>{likeCount} Like</span></a></li>
-                </Style>
-            </ul>
-        </div>
-    )
+                    <Style><li><a><i className="fa fa-heart mr-3" onClick={onLikeHandler}></i></a></li>
+                    <li><a><span>{likeCount} Like</span></a></li>
+                    </Style>
+             </ul>
+        )
+    }
+  
+    
 }
 
 

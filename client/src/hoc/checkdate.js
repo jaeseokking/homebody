@@ -18,7 +18,6 @@ function checkdate(boarddate) {
         day = date.getDate()
     }
     const currentDate = year+'-'+month+'-'+day;
-    console.log(currentDate)
     return (currentDate === boarddate.substr(0,10));
 }
 

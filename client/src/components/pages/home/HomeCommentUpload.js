@@ -85,7 +85,7 @@ const CommentDesign = styled.header`
         padding: 15px 25px;
         margin-bottom: 20px;
         min-height: 45px;
-        font-size: 13px;
+        font-size: 15px;
         font-weight: normal; 
     }
 `

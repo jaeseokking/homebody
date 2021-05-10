@@ -58,7 +58,7 @@ function LoginPage(props){
                         <div className="brand-wrapper">
                             <img src="/logo.png" width="150px" alt="logo" className="logo"/>
                         </div>
-                        <p className="login-card-description">Sign up</p>
+                        <p className="login-card-description">Login</p>
                         <form action="#!">
                             <div className="form-group">
                                 <label htmlFor="ID" className="sr-only">ID</label>
