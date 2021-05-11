@@ -90,6 +90,7 @@ function CommunityUpdate({history}) {
         <Styled>
         <div className="row my-5">
           <div className="cardbox shadow-lg col-md-10 mx-auto mb-3">  
+          <h2 className="mb-3">Post</h2>
           <form encType="multipart/form-data">  
                 <div className="cardbox-heading">                   
                 <input type="text" className="title-input" name="title" id="title" value={title} 

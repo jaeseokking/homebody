@@ -410,11 +410,11 @@ const Styled = styled.header`
 
 `
 
-const CStyle = styled.body`
+const CStyle = styled.header`
   .fa-comments {
     color : rgb(0,100, 255);
   }
 `
 
-const nonStyle = styled.body `
+const nonStyle = styled.header`
 `

@@ -13,6 +13,10 @@ export default function(state = {}, action){
         case 'USER_PROFILE' :
             return {...state, profile : action.payload}
             break;
+
+        case 'USER_AUTH' :
+            return {...state, login : action.payload}
+            break;
             
         default:
             return state;

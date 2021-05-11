@@ -117,7 +117,7 @@ const Header = styled.header`
   
 `;
 
-const Nav = styled.body `
+const Nav = styled.header `
     font-family: Noto Sans CJK KR;
 
     .nav-link {

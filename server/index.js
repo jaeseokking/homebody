@@ -350,15 +350,6 @@ app.get('/api/user/auth', (req, res) => {
                     error : true
                 })
             }
-            else{
-                res.json({
-                     id : results.id,
-                     name : results.name,
-                     nickname : results.nickname,
-                     loginSuccess : true,
-                     profile : results.profile
-                })
-             }
 
         })
 

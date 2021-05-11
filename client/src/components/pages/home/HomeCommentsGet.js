@@ -26,8 +26,9 @@ function HomeCommentsGet() {
         <ReviewDesign>
         <div className="row my-3">
             {list.map((val) => {
+                console.log(val)
                 const base64String = btoa(String.fromCharCode(...new Uint8Array(val.profile.data))) ;
-                return <div key={val.id}className="reviewform mx-4 my-3 row" style={{ width: '70rem'}}> 
+                return <div key={val.homecomment_id}className="reviewform mx-4 my-3 row" style={{ width: '70rem'}}> 
                         <div className="userInfo my-3">
                             <img src ={`data:image/png;base64,${base64String}`}  art='useProfile' className="mr-3 rounded-circle "  style={{width: '35px', height: '35px'}}/><br/>
                             <a>{val.nickname}</a>

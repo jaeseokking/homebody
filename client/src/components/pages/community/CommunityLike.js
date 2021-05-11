@@ -79,7 +79,7 @@ function CommunityLike({likeList, likecnt}) {
                     <Style><li><a><i className="fa fa-heart mr-3" onClick={onLikeHandler}></i></a></li>
                     {likeList.slice(0, 4).map((val) => {
                         const profile = btoa(String.fromCharCode(...new Uint8Array(val.profile.data))) ;
-                        return <li key={val.id}>
+                        return <li key={val.user_nickname}>
                             <a href="#"><img src={profile ? `data:image/png;base64,${profile}` : '/default.png'} className="img-fluid rounded-circle" alt="User"/></a>
                             </li>
                         

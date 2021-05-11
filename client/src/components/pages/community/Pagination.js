@@ -10,7 +10,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
     }
     
     const [pageOfPage , setPageOfPage] = useState(1);
-    const [Per, setPer] = useState(2);
+    const [Per, setPer] = useState(5);
     var LastPage = pageOfPage * Per;
     var FirstPage = LastPage - Per;
 
@@ -35,16 +35,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
         setPageOfPage(pageOfPage - 1);
     }
     
-    console.log(FirstPage, LastPage);
-    console.log(currentNumber);
-    console.log(totalPageOfPage)
     return (
         <PaginationDesign>
         <table>
             <tbody>
                 <tr className="page-item row ">
                 {pageOfPage > 1 ? <td className="page-link" onClick={onBackHandler}>
-                <i class="fas fa-angle-left"></i> 
+                <i className="fas fa-angle-left"></i> 
                 </td> : <></>}
                 {pageNumbers.map(number => (
                         <td key={number} onClick={() => paginate(number)} 
@@ -53,7 +50,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
                         </td>
                 ))}
                 {totalPageOfPage > pageOfPage ? <td className="page-link" onClick={onNextHandler}>
-                    <i class="fas fa-angle-right"></i> 
+                    <i className="fas fa-angle-right"></i> 
                 </td> : <></>}
                 </tr>
             </tbody>   

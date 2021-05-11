@@ -57,17 +57,15 @@ function Comment(props) {
     return (
         <CommentDesign>
         <div className="container my-4" role="main">
-         <h2>Comment</h2>
+         <h2 className="mb-3">Comment</h2>
          <form name="form" id="form" role="form" method="post" 
          action="">
             <div className="mb-3">
-                <label htmlFor="title">Title</label>
                 <input type="text" className="form-control" 
                 name="title" id="title" value={title} placeholder="제목을 입력해 주세요"
                 onChange={onTitleHandler}/>
             </div>     
             <div className="mb-3">
-                <label htmlFor="content">Contents</label>
                 <textarea className="form-control" rows="5" 
                 name="content" id="content" value={content} placeholder="내용을 입력해 주세요"
                 onChange={onContentHandler}/>
