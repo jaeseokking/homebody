@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { communityDelete } from '../../../_actions/board_action';
 
 
-function Dropdown ({postNickName, history}) {
+function Dropdown ({boardWriter, history}) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.user);
@@ -30,8 +30,8 @@ function Dropdown ({postNickName, history}) {
             return;
         }
     }
-    //로그인한 유저와 게시글을 올린 유저가 같을경우 드롭다운을 생성
-    if(loginUserNickname === postNickName){
+    //로그인한 유저와 게시글을 올린 유저가 같을 경우 드롭다운을 생성
+    if(loginUserNickname === boardWriter){
         return (
             <div>
                 <div className="dropdown float-right">

@@ -19,6 +19,7 @@ function HomeCommentsGet() {
     const list = comments.list ?? [];
 
     useEffect(() => {
+
         dispatch(homeCommentGet(body))
     }, [])
 

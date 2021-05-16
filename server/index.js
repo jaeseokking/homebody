@@ -126,7 +126,6 @@ function currentDay(){
 
 app.post('/api/register/idcheck', (req, res) => {
     const id = req.body.id;
-     
     connect();
     const iDDuplicateCheck = 'select * from user where id = ?';
     db.query(iDDuplicateCheck, [id], (err, result) => {
@@ -151,8 +150,7 @@ app.post('/api/register/idcheck', (req, res) => {
 
 //닉네임 중복체크
 app.post('/api/register/nicknamecheck', (req, res) => {
-    const nickname = req.body.nickname;
-     
+    const nickname = req.body.nickname;  
     connect();
     const NicknameDuplicateCheck = 'select * from user where nickname = ?';
     db.query(NicknameDuplicateCheck, [nickname], (err, result) => {
@@ -169,7 +167,6 @@ app.post('/api/register/nicknamecheck', (req, res) => {
                 nicknameCheck : false
             })
         }
-        
     })
     close();
 })
@@ -191,7 +188,6 @@ app.post('/api/user/register', uploadprofile.single('profile'), (req, res) => {
     const salt = Math.round(new Date().valueOf() * Math.random()) + "";
     //알고리즘음 sha512 사용 password를 salt와 합쳐서 해쉬패스워드 생성
     const hashPassword = crypto.createHash('sha512').update(password + salt).digest('hex');
-
      connect()
      //salt 값을 저장해서 로그인할 때 그 솔트값을 이용
      const registerSQL = 'insert into user(id, name, pw, nickname, profile, salt) values(?,?,?,?,?,?)';
@@ -217,8 +213,8 @@ app.post('/api/user/login', (req, res) => {
 
     connect();
 
-    const emailCheckSQL = 'select * from user where id = ?'
-    db.query(emailCheckSQL, [id], (err, results) => {
+    const findUser = 'select * from user where id = ?'
+    db.query(findUser, [id], (err, results) => {
         if(err){
             throw err
         }else{
@@ -246,31 +242,24 @@ app.post('/api/user/login', (req, res) => {
                             throw err
                         } 
                     })
-                    
+
                     var date = new Date();
                     var minutes = 60;
                     date.setTime(date.getTime() + minutes * 60 * 1000)
-
                     res.cookie( "user_token", token,
                     {
                         //쿠키의 시간 설정(밀리초단위)
                         expires : date,
-                        //httpOnly : true
+                        httpOnly : true
                     })
                     const bitMap = fs.readFileSync(`./public/images/users/${results[0].profile}`)
                     const profile = new Buffer.from(bitMap, "base64");
-
                     res.json({  
                         loginSuccess : true,
                         nickname : results[0].nickname,
                         profile : profile,
                         id : id
-                    })
-
-                    
-                
-                    
-              
+                    })      
                 console.log('접속완료')    
             }else{
                 res.json({
@@ -280,10 +269,7 @@ app.post('/api/user/login', (req, res) => {
         }
         }
         close();
-
     })
-
-
 })
 
 app.get('/api/user/logout', (req, res)=> {
@@ -330,6 +316,8 @@ app.get('/api/user/auth', (req, res) => {
     //유저 브라우저에 쿠키로 저장했던 토큰 가져오기 
     //쿠키에 토큰이 없는경우 로그인 안한 false를 준다.
     let token = req.cookies.user_token
+    console.log(token + 'auth')
+
     if(token === undefined){
         res.json({
             loginSuccess : false
@@ -339,8 +327,8 @@ app.get('/api/user/auth', (req, res) => {
         const decode = jwt.verify(token, secretObj.secretKey);
         connect();
         //id 값과 token의 값이 있으면 
-        const findTokenSQL = 'select * from user where id = ? and token = ?';
-        db.query(findTokenSQL, [decode.id, token], (err, results) => {
+        const findToken = 'select * from user where id = ? and token = ?';
+        db.query(findToken, [decode.id, token], (err, results) => {
             if(err){
                 throw err;
             }
@@ -349,13 +337,13 @@ app.get('/api/user/auth', (req, res) => {
                     loginSuccess : false,
                     error : true
                 })
+            }else{
+                res.json({
+                    loginSuccess : true 
+               })
             }
-
         })
-
-    }    
-    
-   
+    }     
 })
 
 app.get('/api/community/all', (req, res, next) => {
@@ -597,41 +585,39 @@ app.post('/api/community/update', uploadBoard.single('image'), (req, res)=> {
             if(err){
                 throw err
             }
+            //원래 저장되어있던 파일
             const originalImage = result[0].image
-            
-            //받아온 파일이름
-            const image = req.file.filename;
+            //새로저장할 파일 파일이름
+            const newImage = req.file.filename;
        
             const updateCommunity = 'update community set title = ?, description = ?, image = ?' +
               'where board_id = ?';
-            db.query(updateCommunity, [title, description, image, board_id], (err, result) => {
+            db.query(updateCommunity, [title, description, newImage, board_id], (err, result) => {
                 if(err){
                      throw err
                  }
-    
-                 if(result.affectedRows === 1){
-                     //원래 파일이 있었던 경우
-                     if(originalImage !== ''){
-                         //원래 파일 삭제
+                if(result.affectedRows === 1){
+                    //원래 파일이 있었던 경우
+                    if(originalImage !== ''){
+                        //원래 파일 삭제
                         fs.unlink(`public/images/board/${originalImage}`, (err) => {
                             if(err){
                                 throw(err)
                             }
-                            
                         })
-                     }
-                     res.json({ Success : true})
-                     console.log('게시글 수정 완료')
-                     
-                 }else{
-                     res.json({ Success : false})
-                     console.log('게시글 수정 실패')
-                 }
-                 close();
+                    }
+                    res.json({ Success : true})
+                    console.log('게시글 수정 완료')
+                    
+                }else{
+                    res.json({ Success : false})
+                    console.log('게시글 수정 실패')
+                }
+                close();
              })
         })
        
-         //이미지를 변경하지 않은경우
+        //이미지를 변경하지 않은경우
         }else{
          connect();
          const updateCommunity = 'update community set title =? , description = ? ' +
@@ -649,10 +635,8 @@ app.post('/api/community/update', uploadBoard.single('image'), (req, res)=> {
                 res.json({ Success : false})
                 console.log('게시글 수정 실패')
             }
-
             close();
         })
-
     }
 })
 
@@ -689,11 +673,7 @@ app.post('/api/community/delete', (req, res) => {
                 console.log('게시글 수정 실패')
             }
             close();
-            
-        
-        })
-
-       
+        })   
     })
 })
 
@@ -729,11 +709,9 @@ app.post('/api/community/like', (req, res) => {
                 list[i].profile = profilebuffer    
             }
         }
-
         res.json({
             list : list
         })
-
     })
     close();
 })
@@ -747,12 +725,11 @@ app.post('/api/community/likeupdate', (req, res) => {
     if(likeCheck === true){
         connect();
         const unlike = 'delete from community_like where board_id = ? and user_nickname = ?';
-        db.query(unlike, [board_id, user_nickname] ,(err, result) => {
+        db.query(unlike, [board_id, user_nickname] ,(err) => {
             if(err){
                 throw err
             }
         })
-
         const findLike = 'select likecnt from community where board_id = ?'
         db.query(findLike, [board_id], (err, result) => {
             if(err){
@@ -761,7 +738,7 @@ app.post('/api/community/likeupdate', (req, res) => {
             const currentLikecnt = result[0].likecnt -1;
 
             const decreaseLike = 'update community set likecnt = ? where board_id = ?'
-            db.query(decreaseLike, [currentLikecnt, board_id], (err, result) => {
+            db.query(decreaseLike, [currentLikecnt, board_id], (err) => {
                 if(err){
                     throw err;
                 }
@@ -769,14 +746,12 @@ app.post('/api/community/likeupdate', (req, res) => {
             close();
         })
         console.log('좋아요 취소')
-    
-
     //좋아요를 누른 경우
     }else{
         connect()
         const like = 'insert into community_like (board_id, user_nickname) ' +
         'values(?,?)';
-        db.query(like, [board_id, user_nickname], (err, result) => {
+        db.query(like, [board_id, user_nickname], (err) => {
             if(err){
                 throw err
             }           
@@ -789,18 +764,15 @@ app.post('/api/community/likeupdate', (req, res) => {
             }
             const currentLikecnt = result[0].likecnt + 1;
             const decreaseLike = 'update community set likecnt = ? where board_id = ?'
-            db.query(decreaseLike, [currentLikecnt, board_id], (err, result) => {
+            db.query(decreaseLike, [currentLikecnt, board_id], (err) => {
                 if(err){
                     throw err;
                 }
             })
             close();
         })
-        
         console.log('좋아요 누름')
     }
- 
-
 })
 
 app.post('/api/community/search', (req, res) => {

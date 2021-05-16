@@ -10,7 +10,6 @@ import styled from 'styled-components';
 
 function Community () {
         const dispatch = useDispatch();
-
         useEffect(() => {
             dispatch(communityAll());
         }, [])
@@ -24,7 +23,7 @@ function Community () {
     
         const indexOfLast = currentPage * postsPerPage;
         const indexOfFirst = indexOfLast - postsPerPage;
-        function currentPosts(list) {
+        function CurrentPosts(list) {
           let currentPosts = 0;
           //slice 첫번째인자부터 마지막인자-1 까지 복사본을 새롭게 생성
           currentPosts = list.slice(indexOfFirst, indexOfLast);
@@ -89,7 +88,7 @@ function Community () {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentPosts(list).map((val) => {
+                                        {CurrentPosts(list).map((val) => {
                                         console.log();
                                         return <tr key={val.board_id}>
                                             <td >{val.board_id}</td>

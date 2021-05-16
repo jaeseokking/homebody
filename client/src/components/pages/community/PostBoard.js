@@ -9,7 +9,7 @@ function PostBoard() {
     
     
     const dispatch = useDispatch();
-    const [previewImage, setPreviewImage] = useState("");
+    const [previewImage, setPreviewImage] = useState('/board_default.png');
     const [image, setImage] = useState(null);
     const [text, setText] = useState();
     const [title, setTitle] = useState();
@@ -74,7 +74,6 @@ function PostBoard() {
             }
         })
 
-
     }
 
 
@@ -128,8 +127,7 @@ const PostDesign = styled.header`
 
     img {
         max-width : 700px;
-        max-heigh : 700px;
-      
+        max-heigh : 700px;  
     }
 
     lable {

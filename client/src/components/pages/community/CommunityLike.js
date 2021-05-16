@@ -23,21 +23,21 @@ function CommunityLike({likeList, likecnt}) {
             console.log(likeList[0].board_id, list.board_id)
             if(likeList[0].board_id == list.board_id){
                 likeList.map((val) =>{
+                    //좋아요를 누른 상태
                     if(val.user_nickname === loginUserNickname){
                         setLikeCheck(true)
                         setStyle(LikeStyled1);
-                        console.log('좋아요 누른 상태')
                     } 
                 })
+            //좋아요를 누르지 않은 상태
             }else{
                 setLikeCheck(false)
                 setStyle(LikeStyled2)
-                console.log('좋아요 누르지 않은 상태');
             }
+        //해당 게시글에 좋아요 0 인 경우
         }else{
             setLikeCheck(false)
             setStyle(LikeStyled2)
-            console.log('좋아요 누르지 않은 상태');
         }
     },[likeList])
 
@@ -117,7 +117,6 @@ const LikeStyled1 = styled.header`
         color : rgb(140,140,140);
         cursor: pointer;
     }
-
 `
 
 const LikeStyled2 = styled.header`
@@ -127,5 +126,4 @@ const LikeStyled2 = styled.header`
         color : rgb(255, 100, 0);
         cursor: pointer;
     }
-
 `

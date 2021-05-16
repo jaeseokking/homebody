@@ -13,13 +13,19 @@ function CommunityUpdate({history}) {
     const list = detail.list ?? [];
     console.log(list);
 
-    const dispatch = useDispatch();
-    const [originalImage, setOriginalImage] = useState()
     const [previewImage, setPreviewImage] = useState("");
     const [image, setImage] = useState(null);
     const [description, setDescription] = useState(list[0].description);
     const [title, setTitle] = useState(list[0].title);
-    const [board_id, setBoardID] = useState();
+    const [board_id, setBoardID] = useState(list[0].board_id);
+
+     useEffect(()=> {   
+      //이미지가 있는 경우
+      if(list[0].image !== ''){
+        const base64Profile = btoa(String.fromCharCode(...new Uint8Array(list[0].image.data))) ;
+        setPreviewImage(`data:image/png;base64,${base64Profile}`);
+      }  
+    },[])
 
     const resizeFile = (file) => new Promise(resolve => {
         //maxWidh 700 maxHeight 700 file jpeg quaulity 70%, format file
@@ -30,12 +36,9 @@ function CommunityUpdate({history}) {
         'file'
         );
     });
-  
-    useEffect(()=> {   
-        const base64Profile = btoa(String.fromCharCode(...new Uint8Array(list[0].image.data))) ;
-        setPreviewImage(`data:image/png;base64,${base64Profile}`);
-        setBoardID(list[0].board_id)
-    },[])
+    
+   
+    const dispatch = useDispatch();
     //읽기가 완료되면 아래코드가 실행됩니다.
     const handleChangeFile = async (event) => {
         let reader = new FileReader();
@@ -90,9 +93,9 @@ function CommunityUpdate({history}) {
         <Styled>
         <div className="row my-5">
           <div className="cardbox shadow-lg col-md-10 mx-auto mb-3">  
-          <h2 className="mb-3">Post</h2>
+          <h2 className="mb-1 ml-2 mt-2">UPDATE</h2>
           <form encType="multipart/form-data">  
-                <div className="cardbox-heading">                   
+                <div className="cardbox-heading px-3">                   
                 <input type="text" className="title-input" name="title" id="title" value={title} 
                     placeholder="title" onChange={onTitleHandler}/> 
 
@@ -103,13 +106,12 @@ function CommunityUpdate({history}) {
                     <label className="inputimage" htmlFor="file-input">
                         <i className="fas fa-camera fa-2x mx-auto" ></i>
                     </label>
-                </div>
-                    
+                </div> 
                 <textarea className="form-control" rows="5" 
-                        name="content" id="content"   placeholder="content" 
-                        onChange={onDescriptionHandler} value={description}/>
+                  name="content" id="content"   placeholder="content" 
+                  onChange={onDescriptionHandler} value={description}/>
                 <button type="button" className="btn btn-outline-secondary text-uppercese my-2" 
-                  id="btnUpload" onClick={onUpdateHandler}>Upload
+                  id="btnUpdate" onClick={onUpdateHandler}>Update
                 </button>
                 <button type="button" className="btn btn-outline-secondary text-uppercese ml-2 my-2" 
                   id="btnCancle" onClick={() => history.push(`/community/details/${board_id}`)}>Cancle
@@ -126,7 +128,8 @@ function CommunityUpdate({history}) {
 export default  withRouter(CommunityUpdate);
 
 const Styled = styled.header`
-  
+  font-family: Noto Sans CJK KR;
+
   lable {
     display: inline-block;
     width : 100%;

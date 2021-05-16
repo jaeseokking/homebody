@@ -17,7 +17,7 @@ export default function (SpecificComponent, option){
         useEffect(() => {
             
             dispatch(userAuth()).then(response => {
-                //console.log(response.payload.loginSuccess)
+                console.log(response.payload.loginSuccess)
                 //로그인 하지 않은 상태 isAuth false
                 if(!response.payload.loginSuccess){
                     if(option === true){//로그인한 사용자만 가능한 페이지 접근시

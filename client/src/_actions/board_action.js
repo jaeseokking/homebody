@@ -33,10 +33,9 @@ export function communityAll () {
 }
 
 
-export function communityUpload(uploadFile){
-    const result = Axios.post('/api/community/upload', uploadFile)
+export function communityUpload(uploadInfo){
+    const result = Axios.post('/api/community/upload', uploadInfo)
     .then(response => response.data)
-     
 
     return{
         type : 'COMMUNITY_UPLOAD',
@@ -44,8 +43,8 @@ export function communityUpload(uploadFile){
     }
 }
 
-export const communityDetail = async (postid) => {
-    const result = await Axios.post('/api/community/detail', postid)
+export const communityDetail = (postid) => {
+    const result = Axios.post('/api/community/detail', postid)
     .then(response => response.data)
 
     return{
@@ -54,8 +53,8 @@ export const communityDetail = async (postid) => {
     }
 }
 
-export const communityUpdate = async (formdata) => {
-    const result = await Axios.post('/api/community/update', formdata)
+export const communityUpdate = (formdata) => {
+    const result = Axios.post('/api/community/update', formdata)
     .then(response => response.data)
 
     return{

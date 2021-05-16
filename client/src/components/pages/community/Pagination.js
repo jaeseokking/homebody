@@ -9,6 +9,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
         pageNumbers.push(i);
     }
     
+    //나누어진 페이지를 5개 씩 나누기 위한 변수
     const [pageOfPage , setPageOfPage] = useState(1);
     const [Per, setPer] = useState(5);
     var LastPage = pageOfPage * Per;
@@ -16,6 +17,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
 
     const totalPageOfPage = Math.ceil(totalPosts/postsPerPage/Per);
     
+    //이전이나 다음버튼을 누를 경우
     useEffect(() => {
         LastPage = pageOfPage * Per;
         FirstPage = LastPage - Per;
@@ -36,13 +38,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
     }
     
     return (
-        <PaginationDesign>
+        <PaginationStyle>
         <table>
             <tbody>
                 <tr className="page-item row ">
                 {pageOfPage > 1 ? <td className="page-link" onClick={onBackHandler}>
                 <i className="fas fa-angle-left"></i> 
-                </td> : <></>}
+                </td> : <></>} 
                 {pageNumbers.map(number => (
                         <td key={number} onClick={() => paginate(number)} 
                             className={number !== currentNumber ? "page-link" : "page-link c"}>
@@ -55,12 +57,11 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
                 </tr>
             </tbody>   
         </table>
-    </PaginationDesign>
-        
+    </PaginationStyle>  
     )
 };
 
-const PaginationDesign = styled.header`
+const PaginationStyle = styled.header`
     font-family: Noto Sans CJK KR;
     .fas {
        font-size : 1rem;

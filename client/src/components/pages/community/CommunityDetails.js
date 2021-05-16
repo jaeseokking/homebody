@@ -56,6 +56,7 @@ function CommunityDetails () {
     }
 
     const onSubmitHandler = () => {
+      
       const body = {
         board_id : board_id,
         comment : comment,
@@ -104,6 +105,10 @@ function CommunityDetails () {
         }
       }
 
+      list.map((val) => {
+        console.log(val)
+      })
+
       const base64Profile = btoa(String.fromCharCode(...new Uint8Array(list[0].profile.data))) ;
       const UserProfile = btoa(String.fromCharCode(...new Uint8Array(loginUserProfile.data))) ;
       
@@ -115,14 +120,11 @@ function CommunityDetails () {
           <div className="row my-5">
           <div className="cardbox shadow-lg col-md-10 ml-auto mr-auto mb-3">  
                 <div className="cardbox-heading">
-                   <Dropdown postNickName={writer}></Dropdown>
+                    <Dropdown boardWriter={writer}></Dropdown>
                      <div className="media">
                         <div className="d-flex">
-                            <a href="">
-                              <img className="writer-img img-fluid rounded-circle mx-1" 
-                              src={base64Profile ? `data:image/png;base64,${base64Profile}` : '/default.png'} 
-                              alt="User"/>
-                            </a>
+                        <img className="writer-img rounded-circle mx-1" 
+                          src={base64Profile ? `data:image/png;base64,${base64Profile}` : '/default.png'} alt="User"/>
                         </div>
                         <div className="media-body">
                             <p className="m-0">{writer}</p>

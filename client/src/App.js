@@ -24,8 +24,8 @@ function App() {
           <Navbar/>
           <Switch>
             <Route exact path="/" component={Auth(Home, null)}/>
-            <Route path="/login" component={Auth(LoginPage, false)}/>
-            <Route path="/register" component={Auth(RegisterPage, false)}/>
+            <Route exact path="/login" component={Auth(LoginPage, false)}/>
+            <Route exact path="/register" component={Auth(RegisterPage, false)}/>
             <Route exact path="/community" component={Auth(Community, null)}/>
             <Route exact path="/about" component={Auth(About, null)}/>
             <Route exact path="/details/:home_id" component={Auth(HomeDetails, true)}/>

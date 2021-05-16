@@ -38,7 +38,8 @@ function Navbar(props) {
       profileimg = btoa(String.fromCharCode(...new Uint8Array(profile.data))) ;
       return  <><li>
           <Link className="nav-link ml-5 my-2" to='/userInfo'>
-          <img className="profile-img img-fluid rounded-circle" src={`data:image/png;base64,${profileimg}`} alt="profile">
+          <img className="profile-img img-fluid rounded-circle" 
+          src={profileimg ? `data:image/png;base64,${profileimg}` : '/default.png'} alt="profile">
           </img>{nickname}</Link>
         </li>
         <li>        

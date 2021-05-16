@@ -40,17 +40,17 @@ export function RegisterPage(props){
     const onNameHandler = (event) => {
         setName(event.target.value);
     }
-
+    
     const onNickNameHandler = (event) => {
         setNickName(event.target.value);
     }
 
 
-    var [idValid , setIDValid] = useState(false);
-    var [passwordValid, setPasswordValid] = useState(false);
-    var [passwordCheckValid, setPasswordCheckValid] = useState(false);    
-    var [nameValid, setNameValid] = useState(false);
-    var [nicknameValid, setNicknameValid] = useState(false);
+    const [idValid , setIDValid] = useState(false);
+    const [passwordValid, setPasswordValid] = useState(false);
+    const [passwordCheckValid, setPasswordCheckValid] = useState(false);    
+    const [nameValid, setNameValid] = useState(false);
+    const [nicknameValid, setNicknameValid] = useState(false);
 
     const [idMessege , setIDMessage] = useState("ㅤ");
     const [nameMessage , setNameMessage] = useState("ㅤ");
@@ -130,8 +130,8 @@ export function RegisterPage(props){
     
     //이름 유효성 검사
     useEffect(() => {
-         //이름을 적은 경우
-         if(name !== '' && name !== undefined){
+            //이름을 적은 경우
+            if(name !== '' && name !== undefined){
             if(NameValid(name)){
                 setNameValid(true);
                 setNameMessage('사용가능한 이름')
@@ -139,7 +139,7 @@ export function RegisterPage(props){
                 setNameValid(false)
                 setNameMessage('한글 영문 2~10 글자가능')
             }
-        //아이디를 입력하지 않은 경우 
+        //이름을 입력하지 않은 경우 
         }else if(name !== undefined){
             setNameValid(false)
             setNameMessage('이름은 필수입력입니다.')
@@ -148,14 +148,14 @@ export function RegisterPage(props){
     },[name])
 
 
-     //닉네임 유효성 검사
-     useEffect(() => {
+    //닉네임 유효성 검사
+    useEffect(() => {
         //nickname을 적은 경우
         if(nickname !== ''){
-            if(NickNameValid(nickname)){
+            if(NickNameValid(nickname) && nickname){
                 setNicknameValid('');
                 //중복검사 하기전 메시지 없음
-                setNicknameMessage('ㅤ')
+                setNicknameMessage('중복검사를 해주세요')
             }else if (!NickNameValid(nickname)){
                 setNicknameValid(false)
                 setNicknameMessage('한글 영문 숫자 2~10 글자가능')
@@ -170,7 +170,7 @@ export function RegisterPage(props){
     //닉네임은 마지막 입력란 이므로 포커스아웃 하지않고 유효성버튼 클릭시 중복확인
     const onNicknameDuplicateCheck = (event) => {
         event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
-        
+
         //유효성 검사를 통과한 경우하고 값이 있을 경우
         if(nicknameValid !== false && nickname !== undefined){
             const body = {
@@ -185,11 +185,9 @@ export function RegisterPage(props){
                     setNicknameMessage('닉네임이 중복됩니다.');
                 }
             
-               
+                
             })
-        }
-        
-        
+        }    
     }
 
     const resizeFile = (file) => new Promise(resolve => {
@@ -205,79 +203,67 @@ export function RegisterPage(props){
 
    
     const onProfileHandler = async (event) => {
-        console.log(profile)
         let reader = new FileReader();
-
+        //읽기가 완료되면 아래코드가 실행
         reader.onloadend = () => {
-            //읽기가 완료되면 아래코드가 실행됩니다.
             const base64 = reader.result;
             if (base64) {
                 //미리보기를 위한 이미지
                 setPreview(base64.toString()); // 파일 base64 상태 업데이트
             }   
         }
-
         if (event.target.files[0]) {
             reader.readAsDataURL(event.target.files[0]); // 파일을 읽어 버퍼에 저장
             const image = await resizeFile(event.target.files[0]);
             setProfile(image); // 파일 상태 업데이트 
-            console.log(image);     
         }
-
     }
 
     
-    const onSubmitHandler = (event) => {
-        const defaultimg = new FileReader("../public/default.png");
-        console.log(defaultimg.result)
+const onSubmitHandler = (event) => {
+    event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
 
-        event.preventDefault(); //refresh 방지 (다음 일을 수행하기 위해서)
-
-        if(!idValid){
-            alert("아이디를 확인해주세요")
-            refID.current.focus();
-            return;
-        }else if(!passwordValid){
-            alert("패스워드를 확인해주세요")
-            refPW.current.focus();
-            return;
-        }else if(!passwordCheckValid){
-            alert("패스워드확인을 확인해주세요")
-            refPWCK.current.focus();
-            return;
-        }else if(!nameValid){
-            alert("이름을 확인해주세요")
-            refName.current.focus();
-            return;
-        }else if(!nicknameValid){
-            alert("닉네임을 확인해주세요")
-            refNick.current.focus();
-            return;
-        }else{
-
-            
-            //파일이 있는 경우 formData로 넘겨야함
-            //action으로 넘겨줄 데이터
-            const formData = new FormData(); 
-            formData.append('id' , id);
-            formData.append('password', password);
-            formData.append('name', name);
-            formData.append('nickname', nickname);
-            formData.append('profile', profile)
-        
-            //action을 사용할 함수
-            dispatch(userRegister(formData)).then(response => {
-                if(response.payload.Success){
-                alert('회원가입 성공')
-                    props.history.push('/login');
-                }else{
-                    alert('회원가입 실패')
-                }
-            })
-        }
-
-        
-    }
+    if(!idValid){
+        alert("아이디를 확인해주세요")
+        refID.current.focus();
+        return;
+    }else if(!passwordValid){
+        alert("패스워드를 확인해주세요")
+        refPW.current.focus();
+        return;
+    }else if(!passwordCheckValid){
+        alert("패스워드확인을 확인해주세요")
+        refPWCK.current.focus();
+        return;
+    }else if(!nameValid){
+        alert("이름을 확인해주세요")
+        refName.current.focus();
+        return;
+    }else if(!nicknameValid){
+        alert("닉네임을 확인해주세요")
+        refNick.current.focus();
+        return;
+    }else{
+        //파일이 있는 경우 formData로 넘겨야함
+        //action으로 넘겨줄 데이터
+        const formData = new FormData(); 
+        formData.append('id' , id);
+        formData.append('password', password);
+        formData.append('name', name);
+        formData.append('nickname', nickname);
+        formData.append('profile', profile)
+    
+        //action을 사용할 함수
+        dispatch(userRegister(formData)).then(response => {
+            if(response.payload.Success){
+            alert('회원가입 성공')
+                props.history.push('/login');
+            }else{
+                alert('회원가입 실패')
+            }
+        })
+    }   
+}
 
     return(
         <div className="registerform">
@@ -302,7 +288,7 @@ export function RegisterPage(props){
                         <Label className="profile mx-5 px-4">Profile</Label><br/>
                             <img className="preview-img img-fluid rounded-circle mx-5"  src={preview} alt="preview" />
                             <Label htmlFor="profile">
-                            <i className="fa fa-camera mb-4" aria-hidden="true"></i>
+                            <i className="fa fa-camera mb-4"></i>
                             </Label> 
                             <Input type="file" name="profile" id="profile" accept="image/*"   onChange={onProfileHandler}/>
                         </FormGroup>
@@ -334,7 +320,6 @@ export function RegisterPage(props){
                                 </Button>
                                 <FormText className="mb-3 mt-0 ml-1">{nicknameMessage}</FormText>
                             </div> 
-                            
                             <Button name="register" id="register" className="btn btn-block register-btn mb-4 mt-4" 
                             onClick={onSubmitHandler}>Register</Button>
                         </FormGroup>
