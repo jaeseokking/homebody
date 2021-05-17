@@ -63,7 +63,6 @@ function CommunityDetails () {
         nickname : nickname
       }
 
-
       dispatch(uploadComment(body)).then(response => {
         //console.log(response.payload)
         if(response.payload.Success){
@@ -151,7 +150,6 @@ function CommunityDetails () {
             <table className="comment-box">
             <tbody> 
             <Comments className="comments" list={currentPosts(commentList)}></Comments>
-            
              </tbody>
             </table>
             <div className="pagenumber">
@@ -161,7 +159,7 @@ function CommunityDetails () {
                   <span className="comment-avatar">
                   <a href=""><img className="rounded-circle" src={`data:image/png;base64,${UserProfile}`} alt="..."/></a>                            
                   </span>
-                  <div className="search">
+                  <div className="post_comment">
                       <input className="comment-text" placeholder="Write a comment" type="text" onChange={onCommentHandler}/>
                       <button onClick={onSubmitHandler}><i className="fa fa-arrow-up mr-1 mt-2"></i></button>
                   </div>
@@ -356,7 +354,7 @@ const Styled = styled.header`
     overflow: auto;
   }
 
-  .search {
+  .post_comment {
    position: relative;
    right: -40px;
    top: -40px;
@@ -369,7 +367,7 @@ const Styled = styled.header`
 
   }
 
-  .search input[type="text"] {
+  .post_comment input[type="text"] {
    padding: 15px 0px 20px 20px;
    border: none;
    border-radius: 4px;
@@ -380,7 +378,7 @@ const Styled = styled.header`
    width : 100%;
   }
 
-  .search input[type="text"]: focus {
+  .post_comment input[type="text"]: focus {
     outline: none;
     border:radius : 4px;
     border:1px solid;
@@ -390,7 +388,7 @@ const Styled = styled.header`
 
 
 
-  .search button {
+  .post_comment button {
    position: absolute;
    right: 0;
    top: 0px;
@@ -403,7 +401,7 @@ const Styled = styled.header`
   
   
   
-  .search button i {
+  .post_comment button i {
    font-size: 20px;
    line-height: 5px;
    display: block;

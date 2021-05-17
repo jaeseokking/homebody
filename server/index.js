@@ -546,7 +546,6 @@ app.post('/api/community/detail', (req, res) => {
         })     
     })  
     close();   
-    
 })
 
 app.post('/api/community/uploadcomment', (req, res) => {
@@ -555,20 +554,15 @@ app.post('/api/community/uploadcomment', (req, res) => {
     const nickname = req.body.nickname;
 
     connect();
-   
-    const insertComment = 'insert into community_comment(board_id, nickname, comment) '+
-    'values(?,?,?)'
+    const insertComment = 'insert into community_comment(board_id, nickname, comment) values(?,?,?)'
     db.query(insertComment, [board_id, nickname, comment], (err, results) => {
         if(err){
             throw err
         }
-
         res.json({
             Success : true
         })
-    })
-
-    
+    }) 
 })
 
 app.post('/api/community/update', uploadBoard.single('image'), (req, res)=> {

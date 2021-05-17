@@ -9,56 +9,56 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentNumber}) => {
         pageNumbers.push(i);
     }
     
-    //나누어진 페이지를 5개 씩 나누기 위한 변수
-    const [pageOfPage , setPageOfPage] = useState(1);
-    const [Per, setPer] = useState(5);
-    var LastPage = pageOfPage * Per;
-    var FirstPage = LastPage - Per;
+//나누어진 페이지를 5개 씩 나누기 위한 변수
+const [pageOfPage , setPageOfPage] = useState(1);
+const [Per, setPer] = useState(5);
+var LastPageIndex = pageOfPage * Per;
+var FirstPageIndex = LastPageIndex - Per;
 
-    const totalPageOfPage = Math.ceil(totalPosts/postsPerPage/Per);
-    
-    //이전이나 다음버튼을 누를 경우
-    useEffect(() => {
-        LastPage = pageOfPage * Per;
-        FirstPage = LastPage - Per;
-        paginate(FirstPage + 1);
-    },[pageOfPage])
-  
+const lastPageOfPage = Math.ceil(totalPosts/postsPerPage/Per);
 
-    if(pageNumbers.length > 5){
-        pageNumbers = pageNumbers.slice(FirstPage , LastPage)
-    }
+//이전이나 다음버튼을 누를 경우
+useEffect(() => {
+    LastPageIndex = pageOfPage * Per;
+    FirstPageIndex = LastPageIndex - Per;
+    paginate(FirstPageIndex + 1);
+},[pageOfPage])
 
-    const onNextHandler = () => {
-        setPageOfPage(pageOfPage + 1);
-    }
 
-    const onBackHandler = () => {
-        setPageOfPage(pageOfPage - 1);
-    }
-    
-    return (
-        <PaginationStyle>
-        <table>
-            <tbody>
-                <tr className="page-item row ">
-                {pageOfPage > 1 ? <td className="page-link" onClick={onBackHandler}>
-                <i className="fas fa-angle-left"></i> 
-                </td> : <></>} 
-                {pageNumbers.map(number => (
-                        <td key={number} onClick={() => paginate(number)} 
-                            className={number !== currentNumber ? "page-link" : "page-link c"}>
-                            {number}
-                        </td>
-                ))}
-                {totalPageOfPage > pageOfPage ? <td className="page-link" onClick={onNextHandler}>
-                    <i className="fas fa-angle-right"></i> 
-                </td> : <></>}
-                </tr>
-            </tbody>   
-        </table>
-    </PaginationStyle>  
-    )
+if(pageNumbers.length > 5){
+    pageNumbers = pageNumbers.slice(FirstPageIndex , LastPageIndex)
+}
+
+const onNextHandler = () => {
+    setPageOfPage(pageOfPage + 1);
+}
+
+const onBackHandler = () => {
+    setPageOfPage(pageOfPage - 1);
+}
+
+return (
+    <PaginationStyle>
+    <table>
+        <tbody>
+            <tr className="page-item row ">
+            {pageOfPage > 1 ? <td className="page-link" onClick={onBackHandler}>
+            <i className="fas fa-angle-left"></i> 
+            </td> : <></>} 
+            {pageNumbers.map(number => (
+                    <td key={number} onClick={() => paginate(number)} 
+                        className={number !== currentNumber ? "page-link" : "page-link c"}>
+                        {number}
+                    </td>
+            ))}
+            {lastPageOfPage > pageOfPage ? <td className="page-link" onClick={onNextHandler}>
+                <i className="fas fa-angle-right"></i> 
+            </td> : <></>}
+            </tr>
+        </tbody>   
+    </table>
+</PaginationStyle>  
+)
 };
 
 const PaginationStyle = styled.header`
