@@ -8,12 +8,6 @@ const jwt = require('jsonwebtoken');
 const secretObj = require('./config/jwt');
 const fs = require('fs');
 const path = require('path')
-//파일 다운로드를 위한 설정
-var util = require('util')
-var mime = require('mime');
-
-const gm = require('gm')
-
 
 
 const app = express();
