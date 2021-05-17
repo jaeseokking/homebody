@@ -28,7 +28,6 @@ export function uploadComment(comment) {
     const result = Axios.post('/api/community/uploadcomment', comment)
     .then(response => response.data)
 
-
     return {
         type : 'COMMUNITY_COMMENT_UPLOAD',
         payload : result
