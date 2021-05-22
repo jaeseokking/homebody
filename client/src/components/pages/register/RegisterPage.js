@@ -152,9 +152,9 @@ export function RegisterPage(props){
     useEffect(() => {
         //nickname을 적은 경우
         if(nickname !== ''){
+            //닉네임이 유효성 검사를 통과한 경우
             if(NickNameValid(nickname) && nickname){
                 setNicknameValid('');
-                //중복검사 하기전 메시지 없음
                 setNicknameMessage('중복검사를 해주세요')
             }else if (!NickNameValid(nickname)){
                 setNicknameValid(false)

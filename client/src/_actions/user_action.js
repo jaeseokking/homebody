@@ -1,6 +1,6 @@
 import Axios from 'axios';
 export function userLogin(loginInfo){
-    //url주소에 매개변수로 받은 submitData 보내서 서버에서 받은 결과값을 변수에 저장 
+    //url주소에 매개변수로 받은 loginInfo를 보내서 서버에서 받은 결과값을 변수에 저장 
     const result = Axios.post('/api/user/login', loginInfo)
     //전해받고 처리할 내용
     .then(response => response.data)
@@ -9,7 +9,6 @@ export function userLogin(loginInfo){
         type : 'USER_LOGIN',
         payload : result
     }
-
 }
 
 export function userRegister(registerInfo){
