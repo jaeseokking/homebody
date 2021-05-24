@@ -414,9 +414,11 @@ app.post('/api/home/getcomment', (req, res) => {
         list = results
         
          for(i= 0 ; i < list.length ; i = i + 1){
-             var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
-             var profilebuffer = new Buffer.from(bitMap, "base64");
-            list[i].profile = profilebuffer    
+             if(list[i].profile !== 'default.png'){
+                var bitMap = fs.readFileSync(`./public/images/users/${list[i].profile}`)
+                var profilebuffer = new Buffer.from(bitMap, "base64");
+                list[i].profile = profilebuffer 
+             }   
          }
         res.json({
             list : list
