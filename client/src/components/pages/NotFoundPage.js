@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 function NotFoundPage () {
     return (
-        <Style>
+        <NotFoundStyle>
         <div className="container">
                 <div className="col-md-12">
                     <div className="error-comment">
@@ -25,12 +25,12 @@ function NotFoundPage () {
                     </div>
                 </div>
             </div>
-        </Style>
+        </NotFoundStyle>
     )
 }
 export default NotFoundPage ;
 
-const Style = styled.div`
+const NotFoundStyle = styled.div`
     font-family: Noto Sans CJK KR;
     color : var(--FontDarkGrey);
     h1 {
