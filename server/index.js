@@ -231,7 +231,7 @@ app.post('/api/user/login', (req, res) => {
                     })
                     //생성한 토큰을 넣어준다.
                     const updateToken = 'update user set token = ? where id = ?'
-                    db.query(updateToken, [token, id], (err, results, field) => {
+                    db.query(updateToken, [token, id], (err) => {
                         if(err){
                             throw err
                         } 
@@ -246,14 +246,17 @@ app.post('/api/user/login', (req, res) => {
                         expires : date,
                         httpOnly : true
                     })
-                    const bitMap = fs.readFileSync(`./public/images/users/${results[0].profile}`)
-                    const profile = new Buffer.from(bitMap, "base64");
+                    var profile = results[0].profile;
+                    if(results[0].profile !== 'default.png'){
+                        const bitMap = fs.readFileSync(`./public/images/users/${results[0].profile}`)
+                        profile = new Buffer.from(bitMap, "base64"); 
+                    }
                     res.json({  
                         loginSuccess : true,
                         nickname : results[0].nickname,
                         profile : profile,
                         id : id
-                    })      
+                    })         
                 console.log('접속완료')    
             }else{
                 res.json({
@@ -310,7 +313,6 @@ app.get('/api/user/auth', (req, res) => {
     //유저 브라우저에 쿠키로 저장했던 토큰 가져오기 
     //쿠키에 토큰이 없는경우 로그인 안한 false를 준다.
     let token = req.cookies.user_token
-    console.log(token + 'auth')
 
     if(token === undefined){
         res.json({
