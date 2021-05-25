@@ -6,12 +6,11 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken');
 const secretObj = require('./config/jwt');
-const fs = require('fs');
+const fs = require('fs'); //파일 접근 라이브러리
 const path = require('path')
 
 
 const app = express();
-app.set('port', process.env.PORT || 5000);
 
 //에러가 발생한 경우 처리
 app.use((err, req, res, next) => {
@@ -20,13 +19,15 @@ app.use((err, req, res, next) => {
 });
 
 //데이터베이스 연결을 위한 함수를 생성 
+const data = fs.readFileSync('./database.json');
+const conf = JSON.parse(data); 
 var db;
 function connect(){
     db = mysql.createConnection({
-        host    : 'localhost',
-        user    : 'root',
-        password: 'qhdvh15911!',
-        database: 'nb'
+        host    : conf.host,
+        user    : conf.user,
+        password: conf.password,
+        database: conf.database
     })
     db.connect((err) => {
         if (err) {
@@ -43,6 +44,8 @@ function close(){
     console.log('mysql 연결 해제!');
     db.end();
 }
+
+app.set('port', process.env.PORT || conf.port);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
