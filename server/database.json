@@ -1,0 +1,7 @@
+{
+    "host"    : "database-1.cc2fcucrh3ps.ap-northeast-2.rds.amazonaws.com",
+    "user"    : "user",
+    "password": "qhdcjs15911!",
+    "database": "homebody_database",
+    "port"    : "5000"
+}

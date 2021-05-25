@@ -359,8 +359,9 @@ app.get('/api/community/all', (req, res, next) => {
         res.json({
             list : list
         })
-        close();
     })
+    close();
+
 })
 
 app.get('/api/home/all', (req, res, next) => {
