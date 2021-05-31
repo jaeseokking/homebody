@@ -10,17 +10,15 @@ export default function (SpecificComponent, option){
     //null : 아무나 출입이 가능한 페이지
     //true : 로그인한 유저만 가능한 페이지
     //false : 로그인한 유저는 출입 불가능한 페이지 
-    const [cookies, setCookie, removeCookie] = useCookies(['user_token']);
-    const user = useSelector(state => state.user ?? {});
-    const login = user.login ?? {}
-    const loginSuccess = login.loginSuccess ?? '';
-    if(loginSuccess == false){
-        removeCookie(['user_token']);
-        console.log('로그인안함')
-    }
-    console.log(loginSuccess);
-
     function AuthenticationCheck(props){
+        const [cookies, setCookie, removeCookie] = useCookies(['user_token']);
+        const user = useSelector(state => state.user ?? {});
+        const login = user.login ?? {}
+        const loginSuccess = login.loginSuccess ?? '';
+        if(loginSuccess == false){
+            removeCookie(['user_token']);
+            console.log('로그인안함')
+        }
 
         const dispatch = useDispatch();
         
