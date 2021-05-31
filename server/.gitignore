@@ -9,6 +9,9 @@ lerna-debug.log*
 #database
 database.json
 
+##config secret key
+/config
+
 #image
 /public/images/
 
