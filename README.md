@@ -24,7 +24,7 @@
 
     - nodemon index.js
 
-### 토큰에 저장할 secretkey 생성
+#### 토큰에 저장할 secretkey 생성
 
 1. server 디렉토리에 config 디렉토리 생성
 
@@ -41,7 +41,7 @@ ex)
     module.exports = jwtObj;
 
 
-### 데이터베이스 정보
+#### 데이터베이스 정보
 
 1. server 디렉토리에 데이터 베이스를 연결할 정보를 저장할 database.json 생성
 
