@@ -1,10 +1,21 @@
+#기본구조
+클라이언트 : Reactjs
+서버 : nodejs with express
+데이터베이스 : MySQL
+
 #client 설정
 기본 노드모듈 설치
 npm install
 
+구동
+npm run start
+
 #server 설정
 기본 노드모듈 설치
 npm install
+
+구동
+nodemon index.js
 
 ##토큰에 저장할 secretkey 생성
 1.server 디렉토리에 config 디렉토리 생성
