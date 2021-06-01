@@ -1,7 +1,7 @@
 # 기본구조
 * 클라이언트 : Reactjs
 
-* 서버 : nodejs with express
+* 서버 : Nodejs with express
 
 * 데이터베이스 : MySQL
 
