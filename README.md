@@ -32,7 +32,8 @@ nodemon index.js
 
 3.jwt.js에 사용할 secretkey 생성
 
- ex) let jwtObj = {}
+ ex) 
+    let jwtObj = {}
 
     jwtObj.secretKey = '시크릿 키가 사용될 부분';
 
@@ -45,7 +46,8 @@ nodemon index.js
 
 2.database.json 파일에  JSON 형태의 database 정보 기입
 
-    ex){
+    ex)
+{
 
     "host"    : "호스트",
 
