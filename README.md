@@ -1,7 +1,11 @@
 #client 설정
-
+기본 노드모듈 설치
+npm install
 
 #server 설정
+기본 노드모듈 설치
+npm install
+
 ##토큰에 저장할 secretkey 생성
 1.server 디렉토리에 config 디렉토리 생성
 2.config 디렉토리에 jwt.js 생성

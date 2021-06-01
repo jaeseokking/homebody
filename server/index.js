@@ -71,6 +71,9 @@ const uploadprofile = multer({
     storage: multer.diskStorage({
         destination(req, file, done) {
             //업로드할 디렉토리를 설정
+            if (!fs.existsSync('public/images/users')) {
+                fs.mkdirSync('public/images/users')
+            }
             done(null, 'public/images/users/');
         },
         filename(req, file, done) {
@@ -87,6 +90,9 @@ const uploadBoard = multer({
     storage: multer.diskStorage({
         destination(req, file, done) {
             //업로드할 디렉토리를 설정
+            if (!fs.existsSync('public/images/board')) {
+                fs.mkdirSync('public/images/board')
+            }
             done(null, 'public/images/board/');
         },
         filename(req, file, done) {
@@ -98,7 +104,6 @@ const uploadBoard = multer({
     //파일의 최대 크기를 설정
     limits: { fileSize: 10 * 1024 * 1024 },
 });
-
 //현재시간을 문자열로 리턴하는 함수
 function currentDay() {
     var date = new Date();
